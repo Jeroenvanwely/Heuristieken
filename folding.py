@@ -6,7 +6,7 @@ import random
 import copy
 
 
-def option(grid, row, col, x):
+def optionlist(grid, row, col, x):
     optionlist = []
     print("row en column", row, col)
     print(grid)
@@ -36,6 +36,9 @@ def option(grid, row, col, x):
             optionlist.append(row) 
             optionlist.append(col+1)
 
+    return optionlist
+
+def choose_option(optionlist):
     print("optionlist", optionlist)
     if optionlist != []:
         option = random.randint(0, (len(optionlist)-1))
@@ -93,34 +96,27 @@ def fold(future_row, future_col, row, col, p_list, x):
             p_list[x+i].column = future_col
 
     elif future_col > col:
-        print("hello")
         for i in range(0, len(protein) - x):
             p_list[x+i].row = future_row
             p_list[x+i].column = future_col+i
-            print("row", p_list[x-1].row,"col", p_list[x-1].column, p_list[x-1].value)
-            print("row", p_list[x].row,"col", p_list[x].column, p_list[x].value)
-
+            
     elif future_col < col and p_list[x-1].column == p_list[x].column:
-        print("hello")
         for i in range(0, len(protein) - x):
             p_list[x+i].row = future_row
             p_list[x+i].column = future_col-i
-            print("row", p_list[x-1].row,"col", p_list[x-1].column, p_list[x-1].value)
-            print("row", p_list[x].row,"col", p_list[x].column, p_list[x].value)
-
+           
 
 if __name__ == "__main__":
-    protein = "HHPHHHPH"
+    protein = "HHPHHHPHPHHHPH"
     grid = pp.build_grid(protein)
     buildprotein = pp.Protein.build_protein(protein)
     p_list = copy.deepcopy(buildprotein.protein_list)
-    score = pp.check_protein(grid, buildprotein, protein) 
 
     for i in range(len(p_list)):
                 column = p_list[i].column
                 row = p_list[i].row
                 value = p_list[i].value
-                grid[row][column] = str(i)
+                grid[row][column] = value + str(i)
 
     for i in range(0, len(p_list)):
         if i < 1:
@@ -128,7 +124,7 @@ if __name__ == "__main__":
         else: 
             current_row = p_list[i-1].row
             current_col = p_list[i-1].column
-            future_row, future_col = option(grid, current_row, current_col, i)
+            future_row, future_col = choose_option(optionlist(grid, current_row, current_col, i))
             print(future_row, future_col)
             fold(future_row, future_col, current_row, current_col, p_list, i)
             grid = pp.build_grid(protein)
@@ -136,5 +132,7 @@ if __name__ == "__main__":
                 column = p_list[i].column
                 row = p_list[i].row
                 value = p_list[i].value
-                grid[row][column] =  str(i)
+                grid[row][column] = value + str(i)
     print(grid)
+    score = pp.check_protein(grid, buildprotein, protein) 
+    print(score)

@@ -55,7 +55,7 @@ def build_grid(protein):
         grid_length = 2*len(protein)
     else:
         grid_length = 2*len(protein) + 1
-    grid = np.chararray((grid_length, grid_length), itemsize = 2, unicode=True)
+    grid = np.chararray((grid_length, grid_length), itemsize = 3, unicode=True)
     grid[:] = '_'
     return grid
 
@@ -74,20 +74,21 @@ def check_protein(grid, Protein, protein):
     
     for i in range(len(protein)):
         if 'H' in grid[row][col+i]:
+            num = str(i+1)
             #kijk boven
-            if 'H' in grid[row-1][col] and i+1 not in grid[row-1][col]:
+            if 'H' in grid[row-1][col] and num not in grid[row-1][col]:
                 if grid[row-1][col] not in checked:
                     score-=1
             #kijk beneden
-            if 'H' in grid[row+1][col] and i+1 not in grid[row-1][col]:
+            if 'H' in grid[row+1][col] and num not in grid[row-1][col]:
                 if grid[row-1][col] not in checked:
                     score-=1
             # kijk links
-            if 'H' in grid[row][col-1] and i+1 not in grid[row-1][col]:
+            if 'H' in grid[row][col-1] and num not in grid[row-1][col]:
                 if grid[row-1][col] not in checked:
                     score-=1
             # kijk rechts
-            if 'H' in grid[row-1][col+1] and i+1 not in grid[row-1][col]:
+            if 'H' in grid[row-1][col+1] and num not in grid[row-1][col]:
                 if grid[row-1][col] not in checked:
                     score-=1
         else:
@@ -97,7 +98,7 @@ def check_protein(grid, Protein, protein):
 
 
 if __name__ == "__main__":
-    protein = "HHPHHHPH"
+    protein = "HHPHHHPHPHHHPH"
     grid = build_grid(protein)
     buildprotein = Protein.build_protein(protein)
     p_list = buildprotein.protein_list
