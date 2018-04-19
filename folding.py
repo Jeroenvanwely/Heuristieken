@@ -32,11 +32,14 @@ def option(grid, row, col, x):
             optionlist.append(col+1)
 
     print("optionlist", optionlist)
-    option = random.randint(0, (len(optionlist)-1))
-    print("option", option)
-    if option%2 != 0:
-        option -= 1
-    return optionlist[option], optionlist[option + 1]
+    if optionlist != []:
+        option = random.randint(0, (len(optionlist)-1))
+        print("option", option)
+        if option%2 != 0:
+            option -= 1
+        return optionlist[option], optionlist[option + 1]
+    else:
+        return row, col
 
 def rotation(current_row, current_col, future_row, future_col):
     rowcoordinate = future_row - current_row
@@ -53,8 +56,6 @@ def fold_check(grid, current_row, current_col, future_row, future_col, x):
     return True
 
 def fold(future_row, future_col, row, col, p_list, x):
-    print(future_row, future_col)
-    print(p_list[x+1].row, p_list[x+1].column)
     if future_row > row: 
         print("hello")  
         for i in range(0, len(protein) - x):
@@ -78,14 +79,19 @@ def fold(future_row, future_col, row, col, p_list, x):
             print("row", p_list[x].row,"col", p_list[x].column, p_list[x].value)
 
 
-    print(p_list[x+1].row, p_list[x+1].column)
-
 if __name__ == "__main__":
     protein = "HHPHHHPH"
     grid = pp.build_grid(protein)
     buildprotein = pp.Protein.build_protein(protein)
     p_list = copy.deepcopy(buildprotein.protein_list)
-    score = pp.check_protein(grid, buildprotein, protein)   
+    score = pp.check_protein(grid, buildprotein, protein) 
+
+    for i in range(len(p_list)):
+                column = p_list[i].column
+                row = p_list[i].row
+                value = p_list[i].value
+                grid[row][column] = str(i)
+
     for i in range(0, len(p_list)):
         if i < 1:
             print("hoi")
@@ -93,6 +99,7 @@ if __name__ == "__main__":
             current_row = p_list[i-1].row
             current_col = p_list[i-1].column
             future_row, future_col = option(grid, current_row, current_col, i)
+            print(future_row, future_col)
             fold(future_row, future_col, current_row, current_col, p_list, i)
             grid = pp.build_grid(protein)
         
