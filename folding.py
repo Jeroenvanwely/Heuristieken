@@ -93,21 +93,14 @@ def fold(future_row, future_col, row, col, p_list, x):
             p_list[x+i].column = future_col
 
     elif future_col > col:
-        print("hello")
         for i in range(0, len(protein) - x):
             p_list[x+i].row = future_row
             p_list[x+i].column = future_col+i
-            print("row", p_list[x-1].row,"col", p_list[x-1].column, p_list[x-1].value)
-            print("row", p_list[x].row,"col", p_list[x].column, p_list[x].value)
 
     elif future_col < col and p_list[x-1].column == p_list[x].column:
-        print("hello")
         for i in range(0, len(protein) - x):
             p_list[x+i].row = future_row
             p_list[x+i].column = future_col-i
-            print("row", p_list[x-1].row,"col", p_list[x-1].column, p_list[x-1].value)
-            print("row", p_list[x].row,"col", p_list[x].column, p_list[x].value)
-
 
 if __name__ == "__main__":
     protein = "HHPHHHPH"

@@ -1,5 +1,6 @@
 import pandas as pd 
 import numpy as np
+import random
 
 class Node:
     def  __init__(self, value):
@@ -95,20 +96,99 @@ def check_protein(grid, Protein, protein):
         checked.append(grid[row][col])
     return score
 
+def choose_random_option(option_list):
+    # kies een random row met zijn bijbehorende column uit option_list
+    option = random.randint(0, (len(option_list) - 1))
+    if option%2 != 0:
+        option -= 1
+    return option
+
+def check_location(option_list, row_column_list):
+    # en check of deze positie al bezet is
+    uni = False
+    row = 0
+    column = 0
+    # Zolang niet een positie gevonden is
+    while uni == False:
+        # kies een random row met zijn bijbehorende column uit option_list
+        option = choose_random_option(option_list)
+        if option % 2 != 0:
+            option -= 1
+        # check of deze positie al bezet is
+        for i in range(0, len(row_column_list), 2):
+            # als postie bezet is, break
+            if option_list[option] == row_column_list[i] and option_list[option+1] == row_column_list[i+1]:
+                break
+            # als positie vrij is, sla deze row en col op
+            if i == len(row_column_list)-2: 
+                uni = True
+                row = option_list[option]
+                column = option_list[option+1]
+    return row, column
+
+def random_structure(p_list):
+    option_list = []
+    row_column_list = []
+    switch = False
+    # kies een random beginpunt in de proteine
+    starting_index = random.randint(0, (len(p_list) - 1))
+    idx = starting_index
+    for i in range(len(p_list)+1):
+        
+        # eerste mag gelijk geplaatst worden   
+        if i == 0:
+            row_column_list.append(p_list[idx].row)
+            row_column_list.append(p_list[idx].column)
+        
+        else:
+            # sla de row en column van het voorgaande aminozuur tijdelijk op
+            if switch == False:
+                row = p_list[idx-1].row
+                column = p_list[idx-1].column
+            else:
+                row = p_list[idx+1].row
+                column = p_list[idx+1].column
+            
+            # maak een lijst met alle mogelijkheiden rondom het voorgaande aminozuur
+            option_list.extend((row-1, column, row+1, column, row, column-1, row, column+1))
+            
+            # vind een vrije row en column om op te plaatsen
+            row, column = check_location(option_list, row_column_list)
+            
+            # plaats de gekozen row en column in de bijbehorden node in de p_list
+            p_list[idx].row = row
+            p_list[idx].column = column
+            
+            # plaats nieuwe row en column in row_list en column_list
+            row_column_list.append(row)
+            row_column_list.append(column)
+            
+            # leeg de option_list
+            option_list = []
+            
+            # ga naar de volgende index
+            if idx < len(p_list) - 1 and switch == False:
+                idx += 1
+            elif switch == True:
+                idx -= 1 
+            else:
+                idx = starting_index - 1
+                switch = True
 
 if __name__ == "__main__":
     protein = "HHPHHHPH"
     grid = build_grid(protein)
     buildprotein = Protein.build_protein(protein)
     p_list = buildprotein.protein_list
+    random_structure(p_list)
     for i in range(len(p_list)):
         column = p_list[i].column
         row = p_list[i].row
         value = p_list[i].value
         grid[row][column] = value + str(i)
     print(grid)
-    score = check_protein(grid, buildprotein, protein)
-    print(score)
+    # score = check_protein(grid, buildprotein, protein)
+    # print(score)
 #dict = {}
     # for i in range(len(buildprotein)):
     #     row[buildprotein[i]] = 'mynewvalue'
