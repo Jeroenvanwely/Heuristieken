@@ -7,6 +7,5 @@ import copy
 import folding as ff
 
 if __name__ == "__main__":
-    protein = "HHPHHHPHPHHHPH"
     Fold = ff.Fold()
-    Fold.get_fold()
+    Fold.random_fold()
