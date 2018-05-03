@@ -75,27 +75,56 @@ class Fold:
 
 
     def fold(self, future_row, future_col, row, col, x):
-        if future_row > row: 
+        temp_p = copy.deepcopy(self.p_list)
+        row_translations = [0]
+        col_translations = [0] #0 zodat hij bij de eerste geen verandering toebrengt
+
+        rotation = []
+
+
+        for i in range(0, len(self.p_list)):
+            if i == 0:
+                continue
+            else:
+                row_translation = self.p_list[i].row - self.p_list[i-1].row
+                col_translation = self.p_list[i].column - self.p_list[i-1].column
+                row_translations.append(row_translation)
+                col_translations.append(col_translation)
+        
+                print(row_translations, col_translations)
+        
+        if future_row > row:
             for i in range(0, len(self.protein) - x):
-                self.p_list[x+i].row = future_row+i
-                self.p_list[x+i].column = future_col
+                self.p_list[i].row = future_row+1
+                self.p_list[i].column = future_col
+            for i in range(0, len(self.p_list)):
+                self.p_list[i].row += row_translations[i]
+                self.p_list[i].column += col_translations[i]
 
         elif future_row < row and self.p_list[x-1].row == self.p_list[x].row:
             for i in range(0, len(self.protein) - x):
-                self.p_list[x+i].row = future_row-i
-                self.p_list[x+i].column = future_col
+                self.p_list[x+1].row = future_row-1
+                self.p_list[x+1].column = future_col
+            for i in range(0, len(self.p_list)):
+                self.p_list[i].row += row_translations[i]
+                self.p_list[i].column += col_translations[i]
 
         elif future_col > col:
             for i in range(0, len(self.protein) - x):
-                self.p_list[x+i].row = future_row
-                self.p_list[x+i].column = future_col+i
+                self.p_list[x+1].row = future_row
+                self.p_list[x+1].column = future_col+1
+            for i in range(0, len(self.p_list)):
+                self.p_list[i].row += row_translations[i]
+                self.p_list[i].column += col_translations[i]
                 
         elif future_col < col and self.p_list[x-1].column == self.p_list[x].column:
             for i in range(0, len(self.protein) - x):
                 self.p_list[x+i].row = future_row
-                self.p_list[x+i].column = future_col-i
+                self.p_list[x+i].column = future_col-1
+            for i in range(0, len(self.p_list)):
+                self.p_list[i].row += row_translations[i]
+                self.p_list[i].column += col_translations[i]
         
-        print("fold", self.grid)
             
 
     def get_fold(self):
@@ -131,7 +160,6 @@ class Fold:
                 self.grid[row][column] = value + str(i)
 
         for i in range(0, 100):
-            [print('check',j.row, j.column) for j in self.p_list]
             current_grid = copy.deepcopy(self.grid)
             current_score = pp.check_protein(self.grid, self.buildprotein, self.protein)
             current_grid = copy.deepcopy(self.grid)
@@ -152,9 +180,12 @@ class Fold:
                     column = self.p_list[k].column
                     row = self.p_list[k].row
                     value = self.p_list[k].value
-                    print(row, column)
                     self.grid[row][column] = value + str(k)
             
+            # if pp.check_protein(self.grid, self.buildprotein, self.protein) >= current_score:
+            #     continue
+            # else:
+            #     self.grid = current_grid            
             
             print(self.grid)
         score = pp.check_protein(self.grid, self.buildprotein, self.protein) 
