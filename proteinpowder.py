@@ -10,6 +10,7 @@ class Node:
         self.value = value
         self.row = None
         self.column = None
+        self.rotation = None
 
 class Protein:
     def __init__(self, head_node = None):
@@ -47,6 +48,27 @@ class Protein:
         protein_length = len(protein)
         for i in range (protein_length):
             protein_object.insert(protein[i], protein_length)
+        rotationlist = []
+        # Hij zeurt hier om self niet kennen en ik snap niet waarom niet?
+        # als we dit fixen is dit gefixt
+        for i in range(1, protein_length):
+            row_translation = self.protein_list[i].row - self.protein_list[i-1].row 
+            col_translation = self.protein_list[i].column - self.protein_list[i-1].column
+            rotation = (row_translation, col_translation)
+            
+            if rotation == (0, 1):
+                self.protein_list[i].rotation = 0
+            elif rotation == (1, 0):
+                self.protein_list[i].rotatio sn = 1
+            elif rotation == (0, -1):
+                self.protein_list[i].rotation = 2
+            elif rotation == (-1, 0):
+                self.protein_list[i].rotation = 4
+            else:
+                self.protein_list[i].rotation = 0 #TEMP Kan niet
+
+
+
         return protein_object
 
 # Andere algoritmes

@@ -79,51 +79,36 @@ class Fold:
         row_translations = [0]
         col_translations = [0] #0 zodat hij bij de eerste geen verandering toebrengt
 
-        rotation = []
-
-
-        for i in range(0, len(self.p_list)):
-            if i == 0:
-                continue
-            else:
-                row_translation = self.p_list[i].row - self.p_list[i-1].row
-                col_translation = self.p_list[i].column - self.p_list[i-1].column
-                row_translations.append(row_translation)
-                col_translations.append(col_translation)
-        
-                print(row_translations, col_translations)
+        rotation = [(0, 1), (1, 0), (0, -1), (-1, 0)] #translatie van de rotatie
         
         if future_row > row:
-            for i in range(0, len(self.protein) - x):
-                self.p_list[i].row = future_row+1
-                self.p_list[i].column = future_col
-            for i in range(0, len(self.p_list)):
-                self.p_list[i].row += row_translations[i]
-                self.p_list[i].column += col_translations[i]
+            # verander de eerstvolgende en dan pas de rest in een loop met de translatie van de vorige
+            self.p_list[x].row = future_row+1
+            self.p_list[x].column = future_col
+            for i in range(x, len(self.p_list)):
+                self.p_list[i].row += self.p_list[i].rotation[0] # Maar dan alleen de eerste element
+                self.p_list[i].col += self.p_list[i].rotation[1] # en dan alleen de tweede
 
         elif future_row < row and self.p_list[x-1].row == self.p_list[x].row:
-            for i in range(0, len(self.protein) - x):
-                self.p_list[x+1].row = future_row-1
-                self.p_list[x+1].column = future_col
+            self.p_list[x].row = future_row-1
+            self.p_list[x].column = future_col
             for i in range(0, len(self.p_list)):
-                self.p_list[i].row += row_translations[i]
-                self.p_list[i].column += col_translations[i]
+                self.p_list[i].row += self.p_list[i].rotation[0] # Maar dan alleen de eerste element
+                self.p_list[i].col += self.p_list[i].rotation[1]
 
         elif future_col > col:
-            for i in range(0, len(self.protein) - x):
-                self.p_list[x+1].row = future_row
-                self.p_list[x+1].column = future_col+1
+            self.p_list[x].row = future_row
+            self.p_list[x].column = future_col+1
             for i in range(0, len(self.p_list)):
-                self.p_list[i].row += row_translations[i]
-                self.p_list[i].column += col_translations[i]
+                self.p_list[i].row += self.p_list[i].rotation[0] # Maar dan alleen de eerste element
+                self.p_list[i].col += self.p_list[i].rotation[1]
                 
         elif future_col < col and self.p_list[x-1].column == self.p_list[x].column:
-            for i in range(0, len(self.protein) - x):
-                self.p_list[x+i].row = future_row
-                self.p_list[x+i].column = future_col-1
+            self.p_list[x].row = future_row
+            self.p_list[x].column = future_col-1
             for i in range(0, len(self.p_list)):
-                self.p_list[i].row += row_translations[i]
-                self.p_list[i].column += col_translations[i]
+                self.p_list[i].row += self.p_list[i].rotation[0] # Maar dan alleen de eerste element
+                self.p_list[i].col += self.p_list[i].rotation[1]
         
             
 
