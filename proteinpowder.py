@@ -10,7 +10,8 @@ class Node:
         self.value = value
         self.row = None
         self.column = None
-        self.rotation = None
+        self.rotation_row = None
+        self.rotation_col = None
 
 class Protein:
     def __init__(self, head_node = None):
@@ -48,28 +49,33 @@ class Protein:
         protein_length = len(protein)
         for i in range (protein_length):
             protein_object.insert(protein[i], protein_length)
-        rotationlist = []
+        protein_object.rotation(protein)
+        return protein_object
+
+
+    def rotation(self, protein):
         # Hij zeurt hier om self niet kennen en ik snap niet waarom niet?
         # als we dit fixen is dit gefixt
-        for i in range(1, protein_length):
+
+        for i in range(1, len(protein)):
             row_translation = self.protein_list[i].row - self.protein_list[i-1].row 
             col_translation = self.protein_list[i].column - self.protein_list[i-1].column
             rotation = (row_translation, col_translation)
             
-            if rotation == (0, 1):
-                self.protein_list[i].rotation = 0
-            elif rotation == (1, 0):
-                self.protein_list[i].rotatio sn = 1
-            elif rotation == (0, -1):
-                self.protein_list[i].rotation = 2
-            elif rotation == (-1, 0):
-                self.protein_list[i].rotation = 4
+            if rotation == (0, 1): #rechts ernaast
+                self.protein_list[i].rotation_row = int(0)
+                self.protein_list[i].rotation_col = int(1)
+            elif rotation == (1, 0): #onder
+                self.protein_list[i].rotation_row = int(1)
+                self.protein_list[i].rotation_col= int(0)
+            elif rotation == (0, -1): #links ernaast
+                self.protein_list[i].rotation_row = int(0)
+                self.protein_list[i].rotation_col = int(-1)
+            elif rotation == (-1, 0): #boven
+                self.protein_list[i].rotation_row = int(-1)
+                self.protein_list[i].rotation_col = int(0)
             else:
-                self.protein_list[i].rotation = 0 #TEMP Kan niet
-
-
-
-        return protein_object
+                break
 
 # Andere algoritmes
 
@@ -204,6 +210,7 @@ if __name__ == "__main__":
     buildprotein = Protein.build_protein(protein)
     p_list = buildprotein.protein_list
     random_structure(p_list)
+
     for i in range(len(p_list)):
         column = p_list[i].column
         row = p_list[i].row

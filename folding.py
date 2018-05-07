@@ -76,39 +76,68 @@ class Fold:
 
     def fold(self, future_row, future_col, row, col, x):
         temp_p = copy.deepcopy(self.p_list)
-        row_translations = [0]
-        col_translations = [0] #0 zodat hij bij de eerste geen verandering toebrengt
-
-        rotation = [(0, 1), (1, 0), (0, -1), (-1, 0)] #translatie van de rotatie
-        
+      
         if future_row > row:
             # verander de eerstvolgende en dan pas de rest in een loop met de translatie van de vorige
             self.p_list[x].row = future_row+1
             self.p_list[x].column = future_col
-            for i in range(x, len(self.p_list)):
-                self.p_list[i].row += self.p_list[i].rotation[0] # Maar dan alleen de eerste element
-                self.p_list[i].col += self.p_list[i].rotation[1] # en dan alleen de tweede
+            count = 0
+            for i in range(x, len(self.p_list)-1):
+                #print(self.p_list[i].row, self.p_list[i].col, self.p_list[i].rotation_row, self.p_list[i].rotation_col)
+                # self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
+                # self.p_list[i].column += self.p_list[i].rotation_row # en dan alleen de tweede
+                if count%2 == 0:
+                    self.p_list[i].row += self.p_list[i].rotation_col
+                    self.p_list[i].column += self.p_list[i].rotation_row
+                    count+= 1
+                else:
+                    self.p_list[i].row -= self.p_list[i].rotation_col
+                    self.p_list[i].column -= self.p_list[i].rotation_row
+                    count += 1
+
 
         elif future_row < row and self.p_list[x-1].row == self.p_list[x].row:
             self.p_list[x].row = future_row-1
             self.p_list[x].column = future_col
+            count = 0
             for i in range(0, len(self.p_list)):
-                self.p_list[i].row += self.p_list[i].rotation[0] # Maar dan alleen de eerste element
-                self.p_list[i].col += self.p_list[i].rotation[1]
+                # self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
+                # self.p_list[i].column += self.p_list[i].rotation_row
+                if count%2 == 0:
+                    self.p_list[i].row -= self.p_list[i].rotation_col
+                    self.p_list[i].column -= self.p_list[i].rotation_row
+                    count+= 1
+                else:
+                    self.p_list[i].row += self.p_list[i].rotation_col
+                    self.p_list[i].column += self.p_list[i].rotation_row
+                    count+= 1
+
 
         elif future_col > col:
             self.p_list[x].row = future_row
             self.p_list[x].column = future_col+1
             for i in range(0, len(self.p_list)):
-                self.p_list[i].row += self.p_list[i].rotation[0] # Maar dan alleen de eerste element
-                self.p_list[i].col += self.p_list[i].rotation[1]
+                # self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
+                # self.p_list[i].column += self.p_list[i].rotation_row
+                if self.p_list[i].rotation_row  == 0:
+                    self.p_list[i].row = self.p_list[i-1].row
+                    self.p_list[i].column = self.p_list[i-1].column
+                else:
+                    self.p_list[i].row = self.p_list[i-1].row - self.p_list[i].rotation_col
+                    self.p_list[i].column = self.p_list[i-1].column + self.p_list[i].rotation_row
                 
-        elif future_col < col and self.p_list[x-1].column == self.p_list[x].column:
+        elif future_col < col and self.p_list[x-1].column == self.p_list[x].column: 
             self.p_list[x].row = future_row
             self.p_list[x].column = future_col-1
             for i in range(0, len(self.p_list)):
-                self.p_list[i].row += self.p_list[i].rotation[0] # Maar dan alleen de eerste element
-                self.p_list[i].col += self.p_list[i].rotation[1]
+                # self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
+                # self.p_list[i].column += self.p_list[i].rotation_row
+                if self.p_list[i].rotation_row  == 0:
+                    self.p_list[i].row = self.p_list[i-1].row
+                    self.p_list[i].column = self.p_list[i-1].column
+                else:
+                    self.p_list[i].row = self.p_list[i-1].row - self.p_list[i].rotation_col
+                    self.p_list[i].column = self.p_list[i-1].column + self.p_list[i].rotation_row
         
             
 
