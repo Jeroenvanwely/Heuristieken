@@ -75,25 +75,37 @@ class Fold:
 
 
     def fold(self, future_row, future_col, row, col, x):
+
+
+        ''' Wat er moet gebeuren: de eerste moet veranderd worden naar de nieuwe positie
+            Dan moet dat onthouden positie t.o.v. de vorige worden toegepast vanaf dit punt
+        '''
+
+
         temp_p = copy.deepcopy(self.p_list)
       
         if future_row > row:
             # verander de eerstvolgende en dan pas de rest in een loop met de translatie van de vorige
-            self.p_list[x].row = future_row+1
+            self.p_list[x].row = future_row#+1
             self.p_list[x].column = future_col
             count = 0
             for i in range(x, len(self.p_list)-1):
                 #print(self.p_list[i].row, self.p_list[i].col, self.p_list[i].rotation_row, self.p_list[i].rotation_col)
                 # self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
                 # self.p_list[i].column += self.p_list[i].rotation_row # en dan alleen de tweede
+                
                 if count%2 == 0:
-                    self.p_list[i].row += self.p_list[i].rotation_col
-                    self.p_list[i].column += self.p_list[i].rotation_row
+                    self.p_list[i].row = (self.p_list[i-1] - self.p_list[i].rotation_col)
+                    self.p_list[i].column = (self.p_list[i-1] - self.p_list[i].rotation_row)
                     count+= 1
                 else:
-                    self.p_list[i].row -= self.p_list[i].rotation_col
-                    self.p_list[i].column -= self.p_list[i].rotation_row
+                    self.p_list[i].row -= (self.p_list[i-1] + self.p_list[i].rotation_col)
+                    self.p_list[i].column -= (self.p_list[i-1] + self.p_list[i].rotation_row)
                     count += 1
+
+                # self.p_list[i].row += (1 + self.p_list[i].rotation_row) 
+                # self.p_list[i].column += (1 + self.p_list[i].rotation_col)
+
 
 
         elif future_row < row and self.p_list[x-1].row == self.p_list[x].row:
@@ -101,8 +113,9 @@ class Fold:
             self.p_list[x].column = future_col
             count = 0
             for i in range(0, len(self.p_list)):
-                # self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
-                # self.p_list[i].column += self.p_list[i].rotation_row
+                self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
+                self.p_list[i].column += self.p_list[i].rotation_row
+                
                 if count%2 == 0:
                     self.p_list[i].row -= self.p_list[i].rotation_col
                     self.p_list[i].column -= self.p_list[i].rotation_row
@@ -111,6 +124,9 @@ class Fold:
                     self.p_list[i].row += self.p_list[i].rotation_col
                     self.p_list[i].column += self.p_list[i].rotation_row
                     count+= 1
+
+                # self.p_list[i].row += (self.p_list[i].rotation_row -1) 
+                # self.p_list[i].column += (self.p_list[i].rotation_col -1)
 
 
         elif future_col > col:
@@ -119,27 +135,35 @@ class Fold:
             for i in range(0, len(self.p_list)):
                 # self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
                 # self.p_list[i].column += self.p_list[i].rotation_row
-                if self.p_list[i].rotation_row  == 0:
-                    self.p_list[i].row = self.p_list[i-1].row
-                    self.p_list[i].column = self.p_list[i-1].column
-                else:
-                    self.p_list[i].row = self.p_list[i-1].row - self.p_list[i].rotation_col
-                    self.p_list[i].column = self.p_list[i-1].column + self.p_list[i].rotation_row
                 
+                # if self.p_list[i].rotation_row  == 0:
+                #     self.p_list[i].row = self.p_list[i-1].row
+                #     self.p_list[i].column = self.p_list[i-1].column
+                # else:
+                #     self.p_list[i].row = self.p_list[i-1].row - self.p_list[i].rotation_col
+                #     self.p_list[i].column = self.p_list[i-1].column + self.p_list[i].rotation_row
+                
+                self.p_list[i].row += (self.p_list[i].rotation_row - 1) 
+                self.p_list[i].column += (1 + self.p_list[i].rotation_col)
+
+
+
         elif future_col < col and self.p_list[x-1].column == self.p_list[x].column: 
             self.p_list[x].row = future_row
             self.p_list[x].column = future_col-1
             for i in range(0, len(self.p_list)):
                 # self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
                 # self.p_list[i].column += self.p_list[i].rotation_row
-                if self.p_list[i].rotation_row  == 0:
-                    self.p_list[i].row = self.p_list[i-1].row
-                    self.p_list[i].column = self.p_list[i-1].column
-                else:
-                    self.p_list[i].row = self.p_list[i-1].row - self.p_list[i].rotation_col
-                    self.p_list[i].column = self.p_list[i-1].column + self.p_list[i].rotation_row
+                
+                # if self.p_list[i].rotation_row  == 0:
+                #     self.p_list[i].row = self.p_list[i-1].row
+                #     self.p_list[i].column = self.p_list[i-1].column
+                # else:
+                #     self.p_list[i].row = self.p_list[i-1].row - self.p_list[i].rotation_col
+                #     self.p_list[i].column = self.p_list[i-1].column + self.p_list[i].rotation_row
         
-            
+                self.p_list[i].row += (1 + self.p_list[i].rotation_row) 
+                self.p_list[i].column += (self.p_list[i].rotation_col -1)
 
     def get_fold(self):
         for i in range(len(self.p_list)):
@@ -188,8 +212,6 @@ class Fold:
                 
                 self.fold(future_row, future_col, current_row, current_col, j)
                 self.grid = pp.build_grid(self.protein)
-                # print("grid", self.grid)
-                # print(self.p_list)
                 for k in range(len(self.p_list)):
                     column = self.p_list[k].column
                     row = self.p_list[k].row
