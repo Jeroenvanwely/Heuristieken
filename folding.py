@@ -201,7 +201,7 @@ class Fold:
                     value = self.Protein.protein_list[k].value
                     self.grid[row][column] = value + str(k)
             
-            if pp.check_protein(self.grid, self.buildprotein, self.protein) >= current_score:
+            if pp.check_protein(self.grid, self.Protein, self.protein) >= current_score:
                 continue
             else:
                 self.grid = current_grid            
