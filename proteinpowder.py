@@ -1,6 +1,14 @@
 import pandas as pd 
 import numpy as np
 import random
+import pandas as pd
+import numpy as np
+import matplotlib.pylab as plt
+import matplotlib.pyplot as plt
+import seaborn as sns
+import matplotlib.patches as mpatches
+
+
 
 class Node:
     def  __init__(self, value):
@@ -60,6 +68,21 @@ def build_grid(protein):
     grid[:] = '_'
     return grid
 
+def print_grid(grid, lowest_row, highest_row, lowest_column, highest_column):
+    for row in grid:
+        print(row)
+        print(row[0:lowest_column - 1])
+        del row[0]
+        print(row)
+        del row[0:lowest_column - 1]
+        del row[highest_column+1:]
+
+    # for j in range(len(grid)):
+    #     if j < lowest_row - 1 or j > highest_row + 1:
+    #         for i in range(len(grid[j])):
+    #             if i < lowest_column - 1 or i > highest_column+1:
+    #                 print(grid[j][i])
+
 def check_protein(grid, Protein, protein):
     ''' We houden de eerste node bij en checken dan alle vier de hokjes
         om hem heen. Degene die de tweede node is pakken we en daarmee
@@ -80,18 +103,22 @@ def check_protein(grid, Protein, protein):
             if 'H' in grid[row-1][col] and num not in grid[row-1][col]:
                 if grid[row-1][col] not in checked:
                     score-=1
+                    print(i, "x")
             #kijk beneden
             if 'H' in grid[row+1][col] and num not in grid[row-1][col]:
                 if grid[row-1][col] not in checked:
                     score-=1
+                    print(i, "xx")
             # kijk links
             if 'H' in grid[row][col-1] and num not in grid[row-1][col]:
                 if grid[row-1][col] not in checked:
                     score-=1
+                    print(i, "xxx")
             # kijk rechts
             if 'H' in grid[row-1][col+1] and num not in grid[row-1][col]:
                 if grid[row-1][col] not in checked:
                     score-=1
+                    print(i, "xxxx")
         else:
             continue
         checked.append(grid[row][col])
@@ -104,7 +131,7 @@ def choose_random_option(option_list):
         option -= 1
     return option
 
-def check_location(option_list, row_column_list):
+def check_location2(option_list, row_column_list):
     # en check of deze positie al bezet is
     uni = False
     row = 0
@@ -127,7 +154,7 @@ def check_location(option_list, row_column_list):
                 column = option_list[option+1]
     return row, column
 
-def random_structure(p_list):
+def random_structure2(p_list):
     option_list = []
     row_column_list = []
     switch = False
@@ -176,23 +203,112 @@ def random_structure(p_list):
                 idx = starting_index - 1
                 switch = True
 
+def check_for_collision(row_list, column_list):
+    for i in range(len(p_list)):
+        row = row_list[i]
+        column = column_list[i]
+        for j in range(len(p_list) - 1 - i):
+            if row == row_list[i+1+j] and column == column_list[i+1+j]:
+                return False
+    return True
+
+def random_structure(p_list):
+    option_list = []
+    row_list = []
+    column_list = []
+
+    for i in range(len(p_list)):
+        # eerste mag gelijk geplaatst worden   
+        if i == 0:
+            row_list.append(p_list[i].row)
+            column_list.append(p_list[i].column)
+        
+        else:
+            # bepaal row en column van voorgaande aminozuur
+            row = p_list[i-1].row
+            column = p_list[i-1].column
+            
+            # maak een lijst met alle mogelijkheiden rondom het voorgaande aminozuur
+            option_list.extend((row-1, column, row+1, column, row, column-1, row, column+1))
+
+            # kies random row en column uit die lijst
+            option = choose_random_option(option_list)
+            
+            # plaats de gekozen row en column in de bijbehorden node in de p_list
+            p_list[i].row = option_list[option]
+            p_list[i].column = option_list[option+1]
+            
+            # plaats nieuwe row en column in row_list en column_list
+            row_list.append(option_list[option])
+            column_list.append(option_list[option+1])
+            
+            # leeg de option_list
+            option_list = []
+    return row_list, column_list
+
+def grid_boundaries(p_list):
+    lowest_row = 100
+    highest_row = 0
+    lowest_column = 100
+    highest_column = 0
+    for i in range(len(p_list)):
+        if p_list[i].row < lowest_row:
+            lowest_row = p_list[i].row
+        if p_list[i].row > highest_row:
+            highest_row = p_list[i].row
+        if p_list[i].column < lowest_column:
+            lowest_column = p_list[i].column
+        if p_list[i].column > highest_column:
+            highest_column = p_list[i].column
+    
+    return lowest_row-1, highest_row+1, lowest_column-1, highest_column+1
+
+
 if __name__ == "__main__":
     protein = "HHPHHHPHPHHHPH"
-    grid = build_grid(protein)
     buildprotein = Protein.build_protein(protein)
     p_list = buildprotein.protein_list
-    random_structure(p_list)
+    row_list, column_list = random_structure(p_list)
+    while check_for_collision(row_list, column_list) == False:
+        row_list, column_list = random_structure(p_list)
+    grid = build_grid(protein)
+    value_list = []
     for i in range(len(p_list)):
         column = p_list[i].column
         row = p_list[i].row
         value = p_list[i].value
+        value_list.append(value)
         grid[row][column] = value + str(i)
-    print(grid)
-    # score = check_protein(grid, buildprotein, protein)
-    # print(score)
-#dict = {}
-    # for i in range(len(buildprotein)):
-    #     row[buildprotein[i]] = 'mynewvalue'
-        
-        
     
+    score = check_protein(grid, buildprotein, protein)
+    print(score)
+    plt.style.use('seaborn-whitegrid')
+
+    lowest_row, highest_row, lowest_column, highest_column = grid_boundaries(p_list)
+    if highest_row - lowest_row >= highest_column - lowest_column:
+        plt.axis([lowest_row, highest_row, lowest_column, lowest_column + highest_row - lowest_row]) 
+    else:
+        plt.axis([lowest_row, lowest_row + highest_column - lowest_column, lowest_column, highest_column])
+
+    colors = {
+        'H' : 'r', 
+        'P' : 'b',
+        }
+    
+    df = {
+        'x': row_list, 
+        'y': column_list, 
+        's': 300, 
+        'group': [colors[x] for x in value_list]
+        }
+
+    plt.plot(df['x'], df['y'], zorder=1)
+    plt.scatter(df['x'], df['y'], df['s'], c=df['group'], zorder=2)
+    
+    classes = ['H','P']
+    class_colours = ['r','b']
+    recs = []
+    for i in range(0,len(class_colours)):
+        recs.append(mpatches.Rectangle((0,0),1,1,fc=class_colours[i]))
+    plt.legend(recs,classes,loc=1)
+    plt.show()
