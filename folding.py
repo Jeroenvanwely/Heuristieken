@@ -8,9 +8,10 @@ import copy
 class Fold:
     def __init__(self):
         self.protein = "HHPHHHPH"
+        self.Protein = pp.Protein(self.protein)
         self.grid = pp.build_grid(self.protein)
-        self.buildprotein = pp.Protein.build_protein(self.protein)
-        self.p_list = copy.deepcopy(self.buildprotein.protein_list)
+        # self.buildprotein = .Protein(self.protein)
+        self.p_list = copy.deepcopy(pp.Protein(self.protein).protein_list)
                 
 
     def optionlist(self, row, col, x):
@@ -76,94 +77,129 @@ class Fold:
 
     def fold(self, future_row, future_col, row, col, x):
 
-
-        ''' Wat er moet gebeuren: de eerste moet veranderd worden naar de nieuwe positie
-            Dan moet dat onthouden positie t.o.v. de vorige worden toegepast vanaf dit punt
+        ''' Vanaf aminozuur x, het aminozuur dat gedraaid gaat worden, gaat er gekeken
+            worden wat de positie van de daarop volgende aminozuren is. Eerst wordt het
+            aminozuur x verplaatst naar de nieuwe positie. Dan wordt er gekeken hoeveel
+            stappen (hoeken van 90 graden) deze heeft gemaakt. Deze stappen worden vervolgens
+            ook toegepast op de daarop volgende aminozuren. Deze gaan dan vanaf de huidige 
+            positie de stappen toepassen en dan de richting die hieruit komt wordt gemaakt
+            vanaf het vorige aminozuur.
         '''
 
+        # DRAMA : er is soms een aminozuur op dezelfde plek?????
+
+        positionlist = [(0,1), (-1,0), (0,-1), (1,0)] #draaiing
+
+        indexlist = self.Protein.position(x)
+
+        newposrow = future_row - row
+        newposcol = future_col - col
+
+        newpos = (newposrow, newposcol)
+        newposindex= positionlist.index(newpos)
+
+        print(indexlist)
+        steps = newposindex - indexlist[0]
 
         temp_p = copy.deepcopy(self.p_list)
+
+        self.p_list[x].row = future_row
+        self.p_list[x].column = future_col
+        for i in range(1, len(indexlist)):
+            print(i, "i", indexlist)
+            newindex = (indexlist[i] + steps) % len(positionlist)
+            print(newindex, "new")
+            value = positionlist[newindex]
+            print("value", value)
+            self.p_list[i].row =  self.p_list[i-1].row + value[0]
+            self.p_list[i].column =  self.p_list[i-1].column + value[1]
+
       
-        if future_row > row:
-            # verander de eerstvolgende en dan pas de rest in een loop met de translatie van de vorige
-            self.p_list[x].row = future_row#+1
-            self.p_list[x].column = future_col
-            count = 0
-            for i in range(x, len(self.p_list)-1):
-                #print(self.p_list[i].row, self.p_list[i].col, self.p_list[i].rotation_row, self.p_list[i].rotation_col)
-                # self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
-                # self.p_list[i].column += self.p_list[i].rotation_row # en dan alleen de tweede
+        # if future_row > row:
+        #     # verander de eerstvolgende en dan pas de rest in een loop met de translatie van de vorige
+        #     self.p_list[x].row = future_row#+1
+        #     self.p_list[x].column = future_col
+        #     count = 0
+        #     for i in range(x, len(self.p_list)-1):
+        #         steps = abs(newposindex - currentindex)
+
+
+        #         #print(self.p_list[i].row, self.p_list[i].col, self.p_list[i].rotation_row, self.p_list[i].rotation_col)
+        #         # self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
+        #         # self.p_list[i].column += self.p_list[i].rotation_row # en dan alleen de tweede
                 
-                if count%2 == 0:
-                    self.p_list[i].row = (self.p_list[i-1] - self.p_list[i].rotation_col)
-                    self.p_list[i].column = (self.p_list[i-1] - self.p_list[i].rotation_row)
-                    count+= 1
-                else:
-                    self.p_list[i].row -= (self.p_list[i-1] + self.p_list[i].rotation_col)
-                    self.p_list[i].column -= (self.p_list[i-1] + self.p_list[i].rotation_row)
-                    count += 1
+        #         # if count%2 == 0:
+        #         #     self.p_list[i].row = (self.p_list[i-1] - self.p_list[i].rotation_col)
+        #         #     self.p_list[i].column = (self.p_list[i-1] - self.p_list[i].rotation_row)
+        #         #     count+= 1
+        #         # else:
+        #         #     self.p_list[i].row -= (self.p_list[i-1] + self.p_list[i].rotation_col)
+        #         #     self.p_list[i].column -= (self.p_list[i-1] + self.p_list[i].rotation_row)
+        #         #     count += 1
 
-                # self.p_list[i].row += (1 + self.p_list[i].rotation_row) 
-                # self.p_list[i].column += (1 + self.p_list[i].rotation_col)
+        #         # self.p_list[i].row += (1 + self.p_list[i].rotation_row) 
+        #         # self.p_list[i].column += (1 + self.p_list[i].rotation_col)
 
 
 
-        elif future_row < row and self.p_list[x-1].row == self.p_list[x].row:
-            self.p_list[x].row = future_row-1
-            self.p_list[x].column = future_col
-            count = 0
-            for i in range(0, len(self.p_list)):
-                self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
-                self.p_list[i].column += self.p_list[i].rotation_row
+
+
+        # elif future_row < row and self.p_list[x-1].row == self.p_list[x].row:
+        #     self.p_list[x].row = future_row-1
+        #     self.p_list[x].column = future_col
+        #     count = 0
+        #     for i in range(0, len(self.p_list)):
+        #         self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
+        #         self.p_list[i].column += self.p_list[i].rotation_row
                 
-                if count%2 == 0:
-                    self.p_list[i].row -= self.p_list[i].rotation_col
-                    self.p_list[i].column -= self.p_list[i].rotation_row
-                    count+= 1
-                else:
-                    self.p_list[i].row += self.p_list[i].rotation_col
-                    self.p_list[i].column += self.p_list[i].rotation_row
-                    count+= 1
+        #         if count%2 == 0:
+        #             self.p_list[i].row -= self.p_list[i].rotation_col
+        #             self.p_list[i].column -= self.p_list[i].rotation_row
+        #             count+= 1
+        #         else:
+        #             self.p_list[i].row += self.p_list[i].rotation_col
+        #             self.p_list[i].column += self.p_list[i].rotation_row
+        #             count+= 1
 
-                # self.p_list[i].row += (self.p_list[i].rotation_row -1) 
-                # self.p_list[i].column += (self.p_list[i].rotation_col -1)
+        #         # self.p_list[i].row += (self.p_list[i].rotation_row -1) 
+        #         # self.p_list[i].column += (self.p_list[i].rotation_col -1)
 
 
-        elif future_col > col:
-            self.p_list[x].row = future_row
-            self.p_list[x].column = future_col+1
-            for i in range(0, len(self.p_list)):
-                # self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
-                # self.p_list[i].column += self.p_list[i].rotation_row
+        # elif future_col > col:
+        #     self.p_list[x].row = future_row
+        #     self.p_list[x].column = future_col+1
+        #     for i in range(0, len(self.p_list)):
+        #         # self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
+        #         # self.p_list[i].column += self.p_list[i].rotation_row
                 
-                # if self.p_list[i].rotation_row  == 0:
-                #     self.p_list[i].row = self.p_list[i-1].row
-                #     self.p_list[i].column = self.p_list[i-1].column
-                # else:
-                #     self.p_list[i].row = self.p_list[i-1].row - self.p_list[i].rotation_col
-                #     self.p_list[i].column = self.p_list[i-1].column + self.p_list[i].rotation_row
+        #         # if self.p_list[i].rotation_row  == 0:
+        #         #     self.p_list[i].row = self.p_list[i-1].row
+        #         #     self.p_list[i].column = self.p_list[i-1].column
+        #         # else:
+        #         #     self.p_list[i].row = self.p_list[i-1].row - self.p_list[i].rotation_col
+        #         #     self.p_list[i].column = self.p_list[i-1].column + self.p_list[i].rotation_row
                 
-                self.p_list[i].row += (self.p_list[i].rotation_row - 1) 
-                self.p_list[i].column += (1 + self.p_list[i].rotation_col)
+        #         self.p_list[i].row += (self.p_list[i].rotation_row - 1) 
+        #         self.p_list[i].column += (1 + self.p_list[i].rotation_col)
 
 
 
-        elif future_col < col and self.p_list[x-1].column == self.p_list[x].column: 
-            self.p_list[x].row = future_row
-            self.p_list[x].column = future_col-1
-            for i in range(0, len(self.p_list)):
-                # self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
-                # self.p_list[i].column += self.p_list[i].rotation_row
+        # elif future_col < col and self.p_list[x-1].column == self.p_list[x].column: 
+        #     self.p_list[x].row = future_row
+        #     self.p_list[x].column = future_col-1
+        #     for i in range(0, len(self.p_list)):
+        #         # self.p_list[i].row += self.p_list[i].rotation_col # Maar dan alleen de eerste element
+        #         # self.p_list[i].column += self.p_list[i].rotation_row
                 
-                # if self.p_list[i].rotation_row  == 0:
-                #     self.p_list[i].row = self.p_list[i-1].row
-                #     self.p_list[i].column = self.p_list[i-1].column
-                # else:
-                #     self.p_list[i].row = self.p_list[i-1].row - self.p_list[i].rotation_col
-                #     self.p_list[i].column = self.p_list[i-1].column + self.p_list[i].rotation_row
+        #         # if self.p_list[i].rotation_row  == 0:
+        #         #     self.p_list[i].row = self.p_list[i-1].row
+        #         #     self.p_list[i].column = self.p_list[i-1].column
+        #         # else:
+        #         #     self.p_list[i].row = self.p_list[i-1].row - self.p_list[i].rotation_col
+        #         #     self.p_list[i].column = self.p_list[i-1].column + self.p_list[i].rotation_row
         
-                self.p_list[i].row += (1 + self.p_list[i].rotation_row) 
-                self.p_list[i].column += (self.p_list[i].rotation_col -1)
+        #         self.p_list[i].row += (1 + self.p_list[i].rotation_row) 
+                # self.p_list[i].column += (self.p_list[i].rotation_col -1)
 
     def get_fold(self):
         for i in range(len(self.p_list)):
@@ -187,7 +223,7 @@ class Fold:
                     value = self.p_list[j].value
                     self.grid[row][column] = value + str(j)
         print(self.grid)
-        score = pp.check_protein(self.grid, self.buildprotein, self.protein) 
+        score = pp.check_protein(self.grid, self.Protein.protein_object, self.protein) 
         print(score)
 
     def random_fold(self): #wannabe hill climber
@@ -199,7 +235,7 @@ class Fold:
 
         for i in range(0, 100):
             current_grid = copy.deepcopy(self.grid)
-            current_score = pp.check_protein(self.grid, self.buildprotein, self.protein)
+            current_score = pp.check_protein(self.grid, self.Protein, self.protein)
             current_grid = copy.deepcopy(self.grid)
             #onthou je plek op dit moment
             j = random.randint(0, (len(self.p_list)-1))
@@ -209,7 +245,7 @@ class Fold:
                 current_row = self.p_list[j-1].row
                 current_col = self.p_list[j-1].column
                 future_row, future_col = self.choose_option(self.optionlist(current_row, current_col, j), current_row, current_col)
-                
+                print(j)
                 self.fold(future_row, future_col, current_row, current_col, j)
                 self.grid = pp.build_grid(self.protein)
                 for k in range(len(self.p_list)):
@@ -224,5 +260,5 @@ class Fold:
             #     self.grid = current_grid            
             
             print(self.grid)
-        score = pp.check_protein(self.grid, self.buildprotein, self.protein) 
+        score = pp.check_protein(self.grid, self.Protein, self.protein) 
         print(score)

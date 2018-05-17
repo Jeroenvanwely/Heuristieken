@@ -10,14 +10,15 @@ class Node:
         self.value = value
         self.row = None
         self.column = None
-        self.rotation_row = None
-        self.rotation_col = None
+        self.rotation = None
 
 class Protein:
-    def __init__(self, head_node = None):
+    def __init__(self, protein_str, head_node = None):
         self.last = None
         self.protein_list = []
         self.first = None
+        self.build_protein(protein_str)
+        # print(self.protein_list)
         
     def insert(self, value, protein_length):
 
@@ -39,23 +40,22 @@ class Protein:
         self.last = node
         self.protein_list.append(node)
 
-    def build_protein(protein):
+    def build_protein(self, protein):
 
         ''' Dit predicaat bouwt een proteine op door per aminozuur te inserten
             in een array. Hierdoor hebben we direct al een nummer aan de verschillende
             aminozuren gehangen.
         '''
-        protein_object = Protein()
         protein_length = len(protein)
         for i in range (protein_length):
-            protein_object.insert(protein[i], protein_length)
-        protein_object.rotation(protein)
-        return protein_object
+            self.insert(protein[i], protein_length)
+        self.rotation(protein)
+        return self
 
 
     def rotation(self, protein):
-        # Hij zeurt hier om self niet kennen en ik snap niet waarom niet?
-        # als we dit fixen is dit gefixt
+        ''' blabla
+        '''
 
         for i in range(1, len(protein)):
             row_translation = self.protein_list[i].row - self.protein_list[i-1].row 
@@ -63,19 +63,37 @@ class Protein:
             rotation = (row_translation, col_translation)
             
             if rotation == (0, 1): #rechts ernaast
-                self.protein_list[i].rotation_row = int(0)
-                self.protein_list[i].rotation_col = int(1)
+                self.protein_list[i].rotation = (0,1)
             elif rotation == (1, 0): #onder
-                self.protein_list[i].rotation_row = int(1)
-                self.protein_list[i].rotation_col= int(0)
+                self.protein_list[i].rotation = (1,0)
             elif rotation == (0, -1): #links ernaast
-                self.protein_list[i].rotation_row = int(0)
-                self.protein_list[i].rotation_col = int(-1)
+                self.protein_list[i].rotation = (0,-1)
             elif rotation == (-1, 0): #boven
-                self.protein_list[i].rotation_row = int(-1)
-                self.protein_list[i].rotation_col = int(0)
+                self.protein_list[i].rotation = (-1, 0)
             else:
                 break
+
+    def position(self, x):
+        ''' Deze checkt wat de positie is van het huidige aminozuur ten opzichte van
+            de vorige. Dus staat hij links rechts boven of onder. Deze posities worden
+            omgezet naar een indexnummer. Dit nummer wordt in een lijst gezet en deze wordt
+            gereturnd.
+        '''
+
+        positionlist = [(0,1), (-1,0), (0,-1), (1,0)]
+        indexlist = []
+        # print(self.protein_list)
+        for i in range(x, len(self.protein_list)):
+            # print(self.protein_list)
+            row_t = self.protein_list[i].row - self.protein_list[i-1].row 
+            col_t = self.protein_list[i].column - self.protein_list[i-1].column
+            print(row_t,col_t)
+            index = positionlist.index((row_t, col_t))
+            print(index)
+            indexlist.append(index)
+        print(indexlist)
+        return indexlist
+
 
 # Andere algoritmes
 
@@ -209,6 +227,7 @@ if __name__ == "__main__":
     grid = build_grid(protein)
     buildprotein = Protein.build_protein(protein)
     p_list = buildprotein.protein_list
+    position(p_list)
     random_structure(p_list)
 
     for i in range(len(p_list)):
