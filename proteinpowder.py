@@ -85,13 +85,12 @@ class Protein:
         # print(self.protein_list)
         for i in range(x, len(self.protein_list)):
             # print(self.protein_list)
+            print('cur',self.protein_list[i].row, self.protein_list[i].column)
+            print('turn',self.protein_list[i-1].row, self.protein_list[i-1].column)
             row_t = self.protein_list[i].row - self.protein_list[i-1].row 
             col_t = self.protein_list[i].column - self.protein_list[i-1].column
-            print(row_t,col_t)
             index = positionlist.index((row_t, col_t))
-            print(index)
             indexlist.append(index)
-        print(indexlist)
         return indexlist
 
 
