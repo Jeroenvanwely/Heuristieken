@@ -135,14 +135,18 @@ def check_protein(grid, Protein, protein):
         Bij elke H die we gecheckt hebben voegen we deze toe aan een lijst
         zodat dubbele tellingen voorkomen worden.'''
 
-    col = Protein.first.column
-    row = Protein.first.row 
 
     score = 0
     checked = []
     
     for i in range(len(protein)):
-        if 'H' in grid[row][col+i]:
+        row = Protein.protein_list[i].row
+        col = Protein.protein_list[i].column
+        if i != len(protein) -1:
+            next_row = Protein.protein_list[i+1].row
+            next_col = Protein.protein_list[i+1].column
+
+        if 'H' in grid[row][col]:
             num = str(i+1)
             #kijk boven
             if 'H' in grid[row-1][col] and num not in grid[row-1][col]:
@@ -150,20 +154,21 @@ def check_protein(grid, Protein, protein):
                     score-=1
                     print(i, "x")
             #kijk beneden
-            if 'H' in grid[row+1][col] and num not in grid[row-1][col]:
-                if grid[row-1][col] not in checked:
+            if 'H' in grid[row+1][col] and num not in grid[row+1][col]:
+                if grid[row+1][col] not in checked:
                     score-=1
                     print(i, "xx")
             # kijk links
-            if 'H' in grid[row][col-1] and num not in grid[row-1][col]:
-                if grid[row-1][col] not in checked:
+            if 'H' in grid[row][col-1] and num not in grid[row][col-1]:
+                if grid[row][col-1] not in checked:
                     score-=1
                     print(i, "xxx")
             # kijk rechts
-            if 'H' in grid[row-1][col+1] and num not in grid[row-1][col]:
-                if grid[row-1][col] not in checked:
+            if 'H' in grid[row][col+1] and num not in grid[row][col+1]:
+                if grid[row][col+1] not in checked:
                     score-=1
                     print(i, "xxxx")
+            checked.append(grid[row][col])
         else:
             continue
         checked.append(grid[row][col])
@@ -226,7 +231,7 @@ def random_structure2(p_list):
             option_list.extend((row-1, column, row+1, column, row, column-1, row, column+1))
             
             # vind een vrije row en column om op te plaatsen
-            row, column = check_location(option_list, row_column_list)
+            row, column = check_location2(option_list, row_column_list)
             
             # plaats de gekozen row en column in de bijbehorden node in de p_list
             p_list[idx].row = row
@@ -311,7 +316,7 @@ def grid_boundaries(p_list):
 
 if __name__ == "__main__":
     protein = "HHPHHHPHPHHHPH"
-    buildprotein = Protein.build_protein(protein)
+    buildprotein = Protein(protein)
     p_list = buildprotein.protein_list
     row_list, column_list = random_structure(p_list)
     
