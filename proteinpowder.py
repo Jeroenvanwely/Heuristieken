@@ -140,12 +140,6 @@ def check_protein(grid, Protein, protein):
     checked = []
     
     for i in range(len(protein)):
-<<<<<<< HEAD
-        row = Protein.protein_list[i].row
-        col = Protein.protein_list[i].column
-        if i != len(protein) -1:
-            next_row = Protein.protein_list[i+1].row
-            next_col = Protein.protein_list[i+1].column
 
         if 'H' in grid[row][col]:
 =======
