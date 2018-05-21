@@ -142,6 +142,7 @@ def check_protein(grid, Protein, protein):
     checked = []
     
     for i in range(len(protein)):
+        
         if 'H' in grid[row][col+i]:
             num = str(i+1)
             #kijk boven
@@ -151,19 +152,21 @@ def check_protein(grid, Protein, protein):
                     print(i, "x")
             #kijk beneden
             if 'H' in grid[row+1][col] and num not in grid[row-1][col]:
-                if grid[row-1][col] not in checked:
+                if grid[row+1][col] not in checked:
                     score-=1
                     print(i, "xx")
             # kijk links
             if 'H' in grid[row][col-1] and num not in grid[row-1][col]:
-                if grid[row-1][col] not in checked:
+                if grid[row][col-1] not in checked:
                     score-=1
                     print(i, "xxx")
             # kijk rechts
-            if 'H' in grid[row-1][col+1] and num not in grid[row-1][col]:
-                if grid[row-1][col] not in checked:
+            if 'H' in grid[row][col+1] and num not in grid[row-1][col]:
+                if grid[row][col+1] not in checked:
                     score-=1
                     print(i, "xxxx")
+            
+            checked.append(grid[row][col])
         else:
             continue
         checked.append(grid[row][col])
@@ -311,7 +314,8 @@ def grid_boundaries(p_list):
 
 if __name__ == "__main__":
     protein = "HHPHHHPHPHHHPH"
-    buildprotein = Protein.build_protein(protein)
+    buildprotein = Protein(protein)
+    # buildprotein = self.Protein.build_protein(protein)
     p_list = buildprotein.protein_list
     row_list, column_list = random_structure(p_list)
     
