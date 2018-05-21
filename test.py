@@ -112,3 +112,23 @@ steps = abs(newposindex - currentindex)
         
         #         self.p_list[i].row += (1 + self.p_list[i].rotation_row) 
                 # self.p_list[i].column += (self.p_list[i].rotation_col -1)
+
+                  def position(self, x):
+        ''' Deze checkt wat de positie is van het huidige aminozuur ten opzichte van
+            de vorige. Dus staat hij links rechts boven of onder. Deze posities worden
+            omgezet naar een indexnummer. Dit nummer wordt in een lijst gezet en deze wordt
+            gereturnd.
+        '''
+
+        positionlist = [(0,1), (-1,0), (0,-1), (1,0)]
+        indexlist = []
+        # print(self.protein_list)
+        for i in range(x, len(self.protein_list)):
+            # print(self.protein_list)
+            print('cur',self.protein_list[i].row, self.protein_list[i].column)
+            print('turn',self.protein_list[i-1].row, self.protein_list[i-1].column)
+            row_t = self.protein_list[i].row - self.protein_list[i-1].row 
+            col_t = self.protein_list[i].column - self.protein_list[i-1].column
+            index = positionlist.index((row_t, col_t))
+            indexlist.append(index)
+        return indexlist

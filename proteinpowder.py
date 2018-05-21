@@ -140,6 +140,7 @@ def check_protein(grid, Protein, protein):
     checked = []
     
     for i in range(len(protein)):
+<<<<<<< HEAD
         row = Protein.protein_list[i].row
         col = Protein.protein_list[i].column
         if i != len(protein) -1:
@@ -147,6 +148,10 @@ def check_protein(grid, Protein, protein):
             next_col = Protein.protein_list[i+1].column
 
         if 'H' in grid[row][col]:
+=======
+        
+        if 'H' in grid[row][col+i]:
+>>>>>>> 5498567eb2c6fd29be70eeffa3be7e67f87e9e10
             num = str(i+1)
             #kijk boven
             if 'H' in grid[row-1][col] and num not in grid[row-1][col]:
@@ -154,20 +159,36 @@ def check_protein(grid, Protein, protein):
                     score-=1
                     print(i, "x")
             #kijk beneden
+<<<<<<< HEAD
             if 'H' in grid[row+1][col] and num not in grid[row+1][col]:
+=======
+            if 'H' in grid[row+1][col] and num not in grid[row-1][col]:
+>>>>>>> 5498567eb2c6fd29be70eeffa3be7e67f87e9e10
                 if grid[row+1][col] not in checked:
                     score-=1
                     print(i, "xx")
             # kijk links
+<<<<<<< HEAD
             if 'H' in grid[row][col-1] and num not in grid[row][col-1]:
+=======
+            if 'H' in grid[row][col-1] and num not in grid[row-1][col]:
+>>>>>>> 5498567eb2c6fd29be70eeffa3be7e67f87e9e10
                 if grid[row][col-1] not in checked:
                     score-=1
                     print(i, "xxx")
             # kijk rechts
+<<<<<<< HEAD
             if 'H' in grid[row][col+1] and num not in grid[row][col+1]:
                 if grid[row][col+1] not in checked:
                     score-=1
                     print(i, "xxxx")
+=======
+            if 'H' in grid[row][col+1] and num not in grid[row-1][col]:
+                if grid[row][col+1] not in checked:
+                    score-=1
+                    print(i, "xxxx")
+            
+>>>>>>> 5498567eb2c6fd29be70eeffa3be7e67f87e9e10
             checked.append(grid[row][col])
         else:
             continue
@@ -317,6 +338,10 @@ def grid_boundaries(p_list):
 if __name__ == "__main__":
     protein = "HHPHHHPHPHHHPH"
     buildprotein = Protein(protein)
+<<<<<<< HEAD
+=======
+    # buildprotein = self.Protein.build_protein(protein)
+>>>>>>> 5498567eb2c6fd29be70eeffa3be7e67f87e9e10
     p_list = buildprotein.protein_list
     row_list, column_list = random_structure(p_list)
     
