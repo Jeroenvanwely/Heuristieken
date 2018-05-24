@@ -7,6 +7,8 @@ import matplotlib.pylab as plt
 import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib.patches as mpatches
+import folding as ff
+from datetime import datetime
 
 
 
@@ -113,20 +115,6 @@ def build_grid(protein):
     grid[:] = '_'
     return grid
 
-def print_grid(grid, lowest_row, highest_row, lowest_column, highest_column):
-    for row in grid:
-        print(row)
-        print(row[0:lowest_column - 1])
-        del row[0]
-        print(row)
-        del row[0:lowest_column - 1]
-        del row[highest_column+1:]
-
-    # for j in range(len(grid)):
-    #     if j < lowest_row - 1 or j > highest_row + 1:
-    #         for i in range(len(grid[j])):
-    #             if i < lowest_column - 1 or i > highest_column+1:
-    #                 print(grid[j][i])
 
 def check_protein(grid, Protein, protein):
     ''' We houden de eerste node bij en checken dan alle vier de hokjes
@@ -135,47 +123,54 @@ def check_protein(grid, Protein, protein):
         Bij elke H die we gecheckt hebben voegen we deze toe aan een lijst
         zodat dubbele tellingen voorkomen worden.'''
 
-
     score = 0
     checked = []
-    
     for i in range(len(protein)):
         row = Protein.protein_list[i].row
         col = Protein.protein_list[i].column
-        if i != len(protein) -1:
-            next_row = Protein.protein_list[i+1].row
-            next_col = Protein.protein_list[i+1].column
-
         if 'H' in grid[row][col]:
             num = str(i+1)
             #kijk boven
-            if 'H' in grid[row-1][col] and num not in grid[row-1][col]:
-                if grid[row-1][col] not in checked:
-                    score-=1
-                    print(i, "x")
+            if ('H' in grid[row-1][col] or 'C' in grid[row-1][col]) and num not in grid[row-1][col] and grid[row-1][col] not in checked:
+                score-=1
             #kijk beneden
-            if 'H' in grid[row+1][col] and num not in grid[row+1][col]:
-
-                if grid[row+1][col] not in checked:
-                    score-=1
-                    print(i, "xx")
+            if ('H' in grid[row+1][col] or 'C' in grid[row+1][col]) and num not in grid[row+1][col] and grid[row+1][col] not in checked:
+                score-=1
             # kijk links
-            if 'H' in grid[row][col-1] and num not in grid[row][col-1]:
-
-                if grid[row][col-1] not in checked:
-                    score-=1
-                    print(i, "xxx")
+            if ('H' in grid[row][col-1] or 'C' in grid[row][col-1]) and num not in grid[row][col-1] and grid[row][col-1] not in checked:
+                score-=1
             # kijk rechts
-            if 'H' in grid[row][col+1] and num not in grid[row][col+1]:
-                if grid[row][col+1] not in checked:
-                    score-=1
-                    print(i, "xxxx")
-
-            
+            if ('H' in grid[row][col+1] or 'C' in grid[row][col+1]) and num not in grid[row][col+1] and grid[row][col+1] not in checked:
+                score-=1
             checked.append(grid[row][col])
-        else:
-            continue
-        checked.append(grid[row][col])
+        
+        if 'C' in grid[row][col]:
+            num = str(i+1)
+            #kijk boven
+            if ('H' in grid[row-1][col] or 'C' in grid[row-1][col]) and num not in grid[row-1][col] and grid[row-1][col] not in checked:
+                if 'H' in grid[row-1][col]:    
+                    score-=1
+                if 'C' in grid[row-1][col]:
+                    score-=5
+            #kijk beneden
+            if ('H' in grid[row+1][col] or 'C' in grid[row-1][col]) and num not in grid[row+1][col] and grid[row+1][col] not in checked:
+                if 'H' in grid[row+1][col]:    
+                    score-=1
+                if 'C' in grid[row+1][col]:
+                    score-=5
+            # kijk links
+            if ('H' in grid[row][col-1] or 'C' in grid[row-1][col]) and num not in grid[row][col-1] and grid[row][col-1] not in checked:
+                if 'H' in grid[row][col-1]:    
+                    score-=1
+                if 'C' in grid[row][col-1]:
+                    score-=5
+            # kijk rechts
+            if ('H' in grid[row][col+1] or 'C' in grid[row-1][col]) and num not in grid[row][col+1] and grid[row][col+1] not in checked:
+                if 'H' in grid[row][col+1]:    
+                    score-=1
+                if 'C' in grid[row][col+1]:
+                    score-=5
+            checked.append(grid[row][col])
     return score
 
 def choose_random_option(option_list):
@@ -210,6 +205,8 @@ def check_location2(option_list, row_column_list):
 
 def random_structure2(p_list):
     option_list = []
+    row_list = []
+    column_list = []
     row_column_list = []
     switch = False
     # kies een random beginpunt in de proteine
@@ -219,6 +216,8 @@ def random_structure2(p_list):
         
         # eerste mag gelijk geplaatst worden   
         if i == 0:
+            row_list.append(p_list[idx].row)
+            column_list.append(p_list[idx].column)
             row_column_list.append(p_list[idx].row)
             row_column_list.append(p_list[idx].column)
         
@@ -231,6 +230,7 @@ def random_structure2(p_list):
                 row = p_list[idx+1].row
                 column = p_list[idx+1].column
             
+            
             # maak een lijst met alle mogelijkheiden rondom het voorgaande aminozuur
             option_list.extend((row-1, column, row+1, column, row, column-1, row, column+1))
             
@@ -242,6 +242,8 @@ def random_structure2(p_list):
             p_list[idx].column = column
             
             # plaats nieuwe row en column in row_list en column_list
+            row_list.append(p_list[idx].row)
+            column_list.append(p_list[idx].column)
             row_column_list.append(row)
             row_column_list.append(column)
             
@@ -256,12 +258,13 @@ def random_structure2(p_list):
             else:
                 idx = starting_index - 1
                 switch = True
+    return row_list, column_list
 
 def check_for_collision(row_list, column_list):
-    for i in range(len(p_list)):
+    for i in range(len(row_list)):
         row = row_list[i]
         column = column_list[i]
-        for j in range(len(p_list) - 1 - i):
+        for j in range(len(row_list) - 1 - i):
             if row == row_list[i+1+j] and column == column_list[i+1+j]:
                 return False
     return True
@@ -300,47 +303,28 @@ def random_structure(p_list):
             option_list = []
     return row_list, column_list
 
-def grid_boundaries(p_list):
+def grid_boundaries(max_p_list):
     lowest_row = 100
     highest_row = 0
     lowest_column = 100
     highest_column = 0
-    for i in range(len(p_list)):
-        if p_list[i].row < lowest_row:
-            lowest_row = p_list[i].row
-        if p_list[i].row > highest_row:
-            highest_row = p_list[i].row
-        if p_list[i].column < lowest_column:
-            lowest_column = p_list[i].column
-        if p_list[i].column > highest_column:
-            highest_column = p_list[i].column
     
+    for i in range(len(max_p_list)):
+        if max_p_list[i].row < lowest_row:
+            lowest_row = max_p_list[i].row
+        if max_p_list[i].row > highest_row:
+            highest_row = max_p_list[i].row
+        if max_p_list[i].column < lowest_column:
+            lowest_column = max_p_list[i].column
+        if max_p_list[i].column > highest_column:
+            highest_column = max_p_list[i].column
+
     return lowest_row-1, highest_row+1, lowest_column-1, highest_column+1
 
-
-if __name__ == "__main__":
-    protein = "HHPHHHPHPHHHPH"
-    buildprotein = Protein(protein)
-    p_list = buildprotein.protein_list
-    row_list, column_list = random_structure(p_list)
-    
-    while check_for_collision(row_list, column_list) == False:
-        row_list, column_list = random_structure(p_list)
-    grid = build_grid(protein)
-    value_list = []
-
-    for i in range(len(p_list)):
-        column = p_list[i].column
-        row = p_list[i].row
-        value = p_list[i].value
-        value_list.append(value)
-        grid[row][column] = value + str(i)
-    
-    score = check_protein(grid, buildprotein, protein)
-    print(score)
+def print_graph(max_p_list, max_row_list, max_column_list, value_list):
     plt.style.use('seaborn-whitegrid')
 
-    lowest_row, highest_row, lowest_column, highest_column = grid_boundaries(p_list)
+    lowest_row, highest_row, lowest_column, highest_column = grid_boundaries(max_p_list)
     if highest_row - lowest_row >= highest_column - lowest_column:
         plt.axis([lowest_row, highest_row, lowest_column, lowest_column + highest_row - lowest_row]) 
     else:
@@ -349,11 +333,12 @@ if __name__ == "__main__":
     colors = {
         'H' : 'r', 
         'P' : 'b',
+        'C' : 'purple',
         }
     
     df = {
-        'x': row_list, 
-        'y': column_list, 
+        'x': max_row_list, 
+        'y': max_column_list, 
         's': 300, 
         'group': [colors[x] for x in value_list]
         }
@@ -361,10 +346,141 @@ if __name__ == "__main__":
     plt.plot(df['x'], df['y'], zorder=1)
     plt.scatter(df['x'], df['y'], df['s'], c=df['group'], zorder=2)
     
-    classes = ['H','P']
-    class_colours = ['r','b']
+    classes = ['H','P', 'C']
+    class_colours = ['r','b','purple']
     recs = []
     for i in range(0,len(class_colours)):
         recs.append(mpatches.Rectangle((0,0),1,1,fc=class_colours[i]))
     plt.legend(recs,classes,loc=1)
     plt.show()
+
+def random_alg(protein):
+    max_score = 0
+    for i in range(100000):
+        buildprotein = Protein(protein)
+        p_list = buildprotein.protein_list
+        row_list, column_list = random_structure(p_list)
+        while check_for_collision(row_list, column_list) == False:
+            row_list, column_list = random_structure(p_list)
+        
+        grid = build_grid(protein)
+        value_list = []
+        for j in range(len(p_list)):
+            column = p_list[j].column
+            row = p_list[j].row
+            value = p_list[j].value
+            value_list.append(value)
+            grid[row][column] = value + str(j)
+        
+        score = check_protein(grid, buildprotein, protein)
+        
+        if score < max_score:
+            max_score = score
+            max_p_list = p_list
+            max_row_list = row_list
+            max_column_list = column_list
+    
+    print(max_score)
+    #print_graph(max_p_list, max_row_list, max_column_list, value_list)
+
+def bias_random_alg(protein):
+    max_score = 0
+    row_list = []
+    column_list = []
+    for i in range(1000):
+        buildprotein = Protein(protein)
+        p_list = buildprotein.protein_list
+
+        Fold = ff.Fold()
+        Fold.get_fold()
+
+        grid = build_grid(protein)
+        value_list = []
+        for j in range(len(p_list)):
+            column = p_list[j].column
+            column_list.append(column)
+            row = p_list[j].row
+            row_list.append(row)
+            value = p_list[j].value
+            value_list.append(value)
+            grid[row][column] = value + str(j)
+
+        score = check_protein(grid, buildprotein, protein)
+
+        if score <= max_score:
+            print("====================================================================================")
+            max_score = score
+            max_p_list = p_list
+            max_row_list = row_list
+            max_column_list = column_list
+    
+    print(max_score)
+    print_graph(max_p_list, max_row_list, max_column_list, value_list)
+
+
+if __name__ == "__main__":
+    protein = "HHPHHHPHPHHHPH"
+    for i in range(10):    
+        startTime = datetime.now()
+        random_alg(protein)
+        print(datetime.now() - startTime)
+    print("===============NEXT================")
+    protein = "HPHPPHHPHPPHPHHPPHPH"
+    for i in range(10):    
+        startTime = datetime.now()
+        random_alg(protein)
+        print(datetime.now() - startTime)
+    print("===============NEXT================")
+    protein = "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP"
+    for i in range(10):    
+        startTime = datetime.now()
+        random_alg(protein)
+        print(datetime.now() - startTime)
+    print("===============NEXT================")
+    protein = "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH"
+    for i in range(10):    
+        startTime = datetime.now()
+        random_alg(protein)
+        print(datetime.now() - startTime)
+    print("===============NEXT================")
+    protein = "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP"
+    for i in range(10):    
+        startTime = datetime.now()
+        random_alg(protein)
+        print(datetime.now() - startTime)
+    print("===============NEXT================")
+    protein = "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC"
+    for i in range(10):    
+        startTime = datetime.now()
+        random_alg(protein)
+        print(datetime.now() - startTime)
+    print("===============NEXT================")
+    protein = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
+    for i in range(10):    
+        startTime = datetime.now()
+        random_alg(protein)
+        print(datetime.now() - startTime)
+    print("===============NEXT================")
+    protein = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
+    for i in range(10):    
+        startTime = datetime.now()
+        random_alg(protein)
+        print(datetime.now() - startTime)
+    # buildprotein = Protein(protein)
+    # p_list = buildprotein.protein_list
+    # row_list, column_list = random_structure2(p_list)
+    # # while check_for_collision(row_list, column_list) == False:
+    # #     row_list, column_list = random_structure(p_list)
+    # grid = build_grid(protein)
+    
+    # value_list = []
+    # for i in range(len(p_list)):
+    #     column = p_list[i].column
+    #     row = p_list[i].row
+    #     value = p_list[i].value
+    #     value_list.append(value)
+    #     grid[row][column] = value + str(i)
+    
+    # score = check_protein(grid, buildprotein, protein)
+    # print(score)
+    # print_graph(p_list, row_list, column_list, value_list)

@@ -170,7 +170,7 @@ class Fold:
                     value = self.Protein.protein_list[j].value
                     self.grid[row][column] = value + str(j)
         print(self.grid)
-        score = pp.check_protein(self.grid, self.Protein.protein_object, self.protein) 
+        score = pp.check_protein(self.grid, self.Protein, self.protein) 
         print(score)
 
     def random_fold(self): #wannabe hill climber
