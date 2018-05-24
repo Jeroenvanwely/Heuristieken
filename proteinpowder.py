@@ -1,8 +1,6 @@
 import pandas as pd 
 import numpy as np
 import random
-import pandas as pd
-import numpy as np
 import matplotlib.pylab as plt
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -90,11 +88,13 @@ class Protein:
 
         positionlist = [(0,1), (-1,0), (0,-1), (1,0)]
         indexlist = []
-        # print(self.protein_list)
+        # print(self.protein_list[:].row,self.protein_list[:].column)
         for i in range(x, len(self.protein_list)):
+            print(self.protein_list[i].row,self.protein_list[i].column)
+            print("aminozuur", i)
             # print(self.protein_list)
-            print('cur',self.protein_list[i].row, self.protein_list[i].column)
-            print('turn',self.protein_list[i-1].row, self.protein_list[i-1].column)
+            # print('cur',self.protein_list[i].row, self.protein_list[i].column)
+            # print('turn',self.protein_list[i-1].row, self.protein_list[i-1].column)
             row_t = self.protein_list[i].row - self.protein_list[i-1].row 
             col_t = self.protein_list[i].column - self.protein_list[i-1].column
             index = positionlist.index((row_t, col_t))
@@ -139,54 +139,29 @@ def check_protein(grid, Protein, protein):
     score = 0
     checked = []
     
-    for i in range(len(protein)):
-
+    for i in range(len(protein)):        
+        row = Protein.protein_list[i].row
+        col = Protein.protein_list[i].column
         if 'H' in grid[row][col]:
-=======
-        
-        if 'H' in grid[row][col+i]:
->>>>>>> 5498567eb2c6fd29be70eeffa3be7e67f87e9e10
             num = str(i+1)
             #kijk boven
-            if 'H' in grid[row-1][col] and num not in grid[row-1][col]:
-                if grid[row-1][col] not in checked:
-                    score-=1
-                    print(i, "x")
+            if 'H' in grid[row-1][col] and num not in grid[row-1][col] and grid[row-1][col] not in checked:
+                score-=1
+                print(i, "x")
             #kijk beneden
-<<<<<<< HEAD
-            if 'H' in grid[row+1][col] and num not in grid[row+1][col]:
-=======
-            if 'H' in grid[row+1][col] and num not in grid[row-1][col]:
->>>>>>> 5498567eb2c6fd29be70eeffa3be7e67f87e9e10
-                if grid[row+1][col] not in checked:
-                    score-=1
-                    print(i, "xx")
+            if 'H' in grid[row+1][col] and num not in grid[row+1][col]and grid[row+1][col] not in checked:
+                score-=1
+                print(i, "xx")
             # kijk links
-<<<<<<< HEAD
-            if 'H' in grid[row][col-1] and num not in grid[row][col-1]:
-=======
-            if 'H' in grid[row][col-1] and num not in grid[row-1][col]:
->>>>>>> 5498567eb2c6fd29be70eeffa3be7e67f87e9e10
-                if grid[row][col-1] not in checked:
-                    score-=1
-                    print(i, "xxx")
+            if 'H' in grid[row][col-1] and num not in grid[row][col-1] and grid[row][col-1] not in checked:
+                score-=1
+                print(i, "xxx")
             # kijk rechts
-<<<<<<< HEAD
-            if 'H' in grid[row][col+1] and num not in grid[row][col+1]:
-                if grid[row][col+1] not in checked:
-                    score-=1
-                    print(i, "xxxx")
-=======
-            if 'H' in grid[row][col+1] and num not in grid[row-1][col]:
-                if grid[row][col+1] not in checked:
-                    score-=1
-                    print(i, "xxxx")
+            if 'H' in grid[row][col+1] and num not in grid[row][col+1] and grid[row][col+1] not in checked:
+                score-=1
+                print(i, "xxxx")
             
->>>>>>> 5498567eb2c6fd29be70eeffa3be7e67f87e9e10
             checked.append(grid[row][col])
-        else:
-            continue
-        checked.append(grid[row][col])
     return score
 
 def choose_random_option(option_list):
@@ -332,10 +307,7 @@ def grid_boundaries(p_list):
 if __name__ == "__main__":
     protein = "HHPHHHPHPHHHPH"
     buildprotein = Protein(protein)
-<<<<<<< HEAD
-=======
     # buildprotein = self.Protein.build_protein(protein)
->>>>>>> 5498567eb2c6fd29be70eeffa3be7e67f87e9e10
     p_list = buildprotein.protein_list
     row_list, column_list = random_structure(p_list)
     

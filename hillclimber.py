@@ -7,7 +7,8 @@ import copy
 import folding as ff
 
 
+
 if __name__ == "__main__":
     Fold = ff.Fold()
-    Fold.random_fold()
+    Fold.hillclimber()
 

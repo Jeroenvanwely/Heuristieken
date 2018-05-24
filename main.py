@@ -1,6 +1,6 @@
 
 
-proteinlist = ["HHPHHHPHPHHHPH", "HPHPPHHPHPPHPHHPPHPH", "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP", "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH"]
+proteinlist = ["HHPHHHPHPHHHPH", "HPHPPHHPHPPHPHHPPHPH", "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP", "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH", "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP", "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC", "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH", "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"]
 
 for i in range(len(proteinlist)):
     print(i+1, ":", proteinlist[i])
@@ -8,7 +8,7 @@ for i in range(len(proteinlist)):
 proteinnumber = int(input("Hello, which protein would you like to use? "))-1
 
 print("Your choice is", proteinlist[proteinnumber])
-heuristicslist = ["Hillclimber", "Random", "Simulated Annealing", "Depthfirst"]
+heuristicslist = ["Random Sampling", "Hillclimber", "Simulated Annealing", "Depthfirst"]
 
 for i in range(len(heuristicslist)):
     print(i+1, ":", heuristicslist[i])
