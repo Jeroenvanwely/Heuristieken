@@ -4,6 +4,7 @@ import random
 import classes as cc
 import random
 import copy
+import helpers as h
 
 def hillclimber(protein): 
     #Om 's avonds te runnen:
@@ -14,7 +15,7 @@ def hillclimber(protein):
     pro_obj.protein_list = copy.deepcopy(cc.Protein(protein).protein_list) 
     # print(pro_obj.protein_list[0].row)  
 
-    insert_protein(grid, pro_obj)
+    h.insert_protein(grid, pro_obj)
 
     for i in range(0, 500):
         current_grid = copy.deepcopy(grid)
@@ -28,7 +29,7 @@ def hillclimber(protein):
         
         folding.fold(future_row, future_col, current_row, current_col, j)
         grid = cc.Protein.build_grid(protein)
-        insert_protein(grid, pro_obj)
+        h.insert_protein(grid, pro_obj)
         
         if cc.Protein.check_protein(grid, pro_obj, protein) <= current_score:
             print(i, "JOE",Check.check_protein(grid, pro_obj, protein))
@@ -41,13 +42,6 @@ def hillclimber(protein):
             print(grid)
         score = Check.check_protein(grid, pro_obj, protein) 
         print(score)
-
-def insert_protein(grid, pro_obj):
-    for i in range(len(pro_obj.protein_list)):
-        column = pro_obj.protein_list[i].column
-        row = pro_obj.protein_list[i].row
-        value = pro_obj.protein_list[i].value
-        grid[row][column] = value + str(i)
 
 if __name__ == "__main__":
     hillclimber("HHPHHHPHPHHHPH")

@@ -6,8 +6,8 @@ import copy
 
 
 class Fold:
-    def __init__(self):
-        self.protein = "HHPHHHP"
+    def __init__(self, protein):
+        self.protein = protein
         self.Protein = pp.Protein(self.protein)
         self.grid = pp.build_grid(self.protein)
         self.Protein.protein_list = copy.deepcopy(pp.Protein(self.protein).protein_list)
@@ -214,7 +214,7 @@ class Fold:
                 value = self.Protein.protein_list[i].value
                 self.grid[row][column] = value + str(i)
 
-        for i in range(0, 5000):
+        for i in range(0, 1000):
             current_grid = copy.deepcopy(self.grid)
             current_score = pp.check_protein(self.grid, self.Protein, self.protein)
             current_p_list = copy.deepcopy(self.Protein.protein_list)
@@ -235,16 +235,17 @@ class Fold:
                     self.grid[row][column] = value + str(k)
             
             if pp.check_protein(self.grid, self.Protein, self.protein) <= current_score:
-                print(i, "JOE",pp.check_protein(self.grid, self.Protein, self.protein))
+                # print(i, "JOE",pp.check_protein(self.grid, self.Protein, self.protein))
                 continue
 
             else:
                 self.grid = current_grid 
                 self.Protein.protein_list = current_p_list           
             
-            print(self.grid)
+            # print(self.grid)
         score = pp.check_protein(self.grid, self.Protein, self.protein) 
-        print(score)
+        # print(score)
+        return score
 
     # def sim_anneal(self):
     #     ''' Ti = T0 - i(T0-Tn) / N

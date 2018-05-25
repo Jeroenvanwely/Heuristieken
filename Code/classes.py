@@ -20,7 +20,6 @@ class Amino:
         self.value = value
         self.row = None
         self.column = None
-        self.rotation = None
 
 class Protein:
     ''' De class Protein maakt een proteine object aan en zorgt dat 
