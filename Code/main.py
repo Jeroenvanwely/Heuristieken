@@ -17,6 +17,7 @@ heuristicsnumber = int(input("Which type of heuristic would you like to use? "))
 
 print("Your choice is", heuristicslist[heuristicsnumber])
 
+hillclimber(proteinlist[proteinnumber])
 
 
 

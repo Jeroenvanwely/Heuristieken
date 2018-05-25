@@ -88,21 +88,7 @@ class Protein:
             indexlist.append(index)
         return indexlist
 
-class Check:
-    ''' De class check bevat algoritmes dat dingen opbouwen of checken aan de hand
-        van het Proteine object. Zoals een score functie en een functie die het grid aanmaakt.
-    '''
-
-    def build_grid(protein):
-        if len(protein) % 2 == 0:
-            grid_length = 2*len(protein)
-        else:
-            grid_length = 2*len(protein) + 1
-        grid = np.chararray((grid_length, grid_length), itemsize = 3, unicode=True)
-        grid[:] = '_'
-        return grid
-
-    def check_protein(grid, Protein, protein):
+    def check_protein(self, grid, protein):
         ''' We houden de eerste node bij en checken dan alle vier de hokjes
             om hem heen. Degene die de tweede node is pakken we en daarmee
             gaan we vervolgens verder om te checken wat om hem heen staat.
@@ -113,16 +99,20 @@ class Check:
         score = 0
         checked = []
         for i in range(len(protein)):
-            row = Protein.protein_list[i].row
-            col = Protein.protein_list[i].column
+            row = self.protein_list[i].row
+            col = self.protein_list[i].column
             if 'H' in grid[row][col]:
                 num = str(i+1)
                 for j in [-1, 1]:
                     #kijk boven of beneden
-                    if ('H' in grid[row+j][col] or 'C' in grid[row+j][col]) and num not in grid[row+j][col] and grid[row+j][col] not in checked:
+
+                    # ALS GEKKE ERROR HEB HIWER ENTER GEDAAN IN IF STATEMENT
+                    if (('H' in grid[row+j][col] or 'C' in grid[row+j][col]) 
+                        and num not in grid[row+j][col] and grid[row+j][col] not in checked):
                         score-=1
                     # kijk links en rechts
-                    if ('H' in grid[row][col+j] or 'C' in grid[row][col+j]) and num not in grid[row][col+j] and grid[row][col+j] not in checked:
+                    if (('H' in grid[row][col+j] or 'C' in grid[row][col+j]) 
+                        and num not in grid[row][col+j] and grid[row][col+j] not in checked):
                         score-=1
                     checked.append(grid[row][col])
             
@@ -130,13 +120,15 @@ class Check:
                 num = str(i+1)
                 for j in [-1, 1]:
                     #kijk boven en beneden
-                    if ('H' in grid[row+j][col] or 'C' in grid[row+j][col]) and num not in grid[row+j][col] and grid[row+j][col] not in checked:
+                    if (('H' in grid[row+j][col] or 'C' in grid[row+j][col]) 
+                        and num not in grid[row+j][col] and grid[row+j][col] not in checked):
                         if 'H' in grid[row+j][col]:    
                             score-=1
                         elif 'C' in grid[row+j][col]:
                             score-=5
                     # kijk links
-                    if ('H' in grid[row][col+j] or 'C' in grid[row+j][col]) and num not in grid[row][col+j] and grid[row][col+j] not in checked:
+                    if (('H' in grid[row][col+j] or 'C' in grid[row+j][col]) 
+                        and num not in grid[row][col+j] and grid[row][col+j] not in checked):
                         if 'H' in grid[row][col+j]:    
                             score-=1
                         elif 'C' in grid[row][col+j]:
@@ -144,15 +136,25 @@ class Check:
                     checked.append(grid[row][col])
         return score
 
+    def build_grid(protein):
+        if len(protein) % 2 == 0:
+            grid_length = 2*len(protein)
+        else:
+            grid_length = 2*len(protein) + 1
+        grid = np.chararray((grid_length, grid_length), itemsize = 3, unicode=True)
+        grid[:] = '_'
+        return grid
+
+
 class Fold:
     ''' De class fold bevat alle algoritmes die nodig zijn voor het vouwen
         van een proteine.
     '''
 
-    def __init__(self):
-        self.protein = "HHPHHHPHPHHHPH"
+    def __init__(self, protein):
+        self.protein = protein
         self.Protein = Protein(self.protein)
-        self.grid = Check.build_grid(self.protein)
+        self.grid = Protein.build_grid(self.protein)
         self.Protein.protein_list = copy.deepcopy(Protein(self.protein).protein_list)
                 
 
@@ -291,44 +293,46 @@ class Fold:
         score = pp.check_protein(self.grid, self.Protein.protein_object, self.protein) 
         print(score)
 
-    def hillclimber(self): 
-    #Om 's avonds te runnen:
-        # for j in range(10000): #TABTAB
+    # def hillclimber(self): #wannabe hill climber
+    #     #Moet kopie van grid of van proteinlist wat?
 
-        for i in range(len(self.Protein.protein_list)):
-                column = self.Protein.protein_list[i].column
-                row = self.Protein.protein_list[i].row
-                value = self.Protein.protein_list[i].value
-                self.grid[row][column] = value + str(i)
+    #     #Om 's avonds te runnen:
+    #         # for j in range(10000): #TABTAB
 
-        for i in range(0, 5000):
-            current_grid = copy.deepcopy(self.grid)
-            current_score = Check.check_protein(self.grid, self.Protein, self.protein)
-            current_p_list = copy.deepcopy(self.Protein.protein_list)
-            j = random.randint(0, (len(self.Protein.protein_list)-1))
-            if j <= 1:
-                continue
-            else: 
-                current_row = self.Protein.protein_list[j-1].row
-                current_col = self.Protein.protein_list[j-1].column
-                future_row, future_col = self.choose_option(self.optionlist(current_row, current_col, j), current_row, current_col)
-                # print(j)
-                self.fold(future_row, future_col, current_row, current_col, j)
-                self.grid = Check.build_grid(self.protein)
-                for k in range(len(self.Protein.protein_list)):
-                    column = self.Protein.protein_list[k].column
-                    row = self.Protein.protein_list[k].row
-                    value = self.Protein.protein_list[k].value
-                    self.grid[row][column] = value + str(k)
-            
-            if Check.check_protein(self.grid, self.Protein, self.protein) <= current_score:
-                print(i, "JOE",Check.check_protein(self.grid, self.Protein, self.protein))
-                continue
+    #         for i in range(len(self.Protein.protein_list)):
+    #                 column = self.Protein.protein_list[i].column
+    #                 row = self.Protein.protein_list[i].row
+    #                 value = self.Protein.protein_list[i].value
+    #                 self.grid[row][column] = value + str(i)
 
-            else:
-                self.grid = current_grid 
-                self.Protein.protein_list = current_p_list           
-            
-            print(self.grid)
-        score = Check.check_protein(self.grid, self.Protein, self.protein) 
-        print(score)
+    #         for i in range(0, 50):
+    #             current_grid = copy.deepcopy(self.grid)
+    #             current_score = Protein.check_protein(self.grid, self.Protein, self.protein)
+    #             current_p_list = copy.deepcopy(self.Protein.protein_list)
+    #             j = random.randint(0, (len(self.Protein.protein_list)-1))
+    #             if j <= 1:
+    #                 continue
+    #             else: 
+    #                 current_row = self.Protein.protein_list[j-1].row
+    #                 current_col = self.Protein.protein_list[j-1].column
+    #                 future_row, future_col = self.choose_option(self.optionlist(current_row, current_col, j), current_row, current_col)
+    #                 # print(j)
+    #                 self.fold(future_row, future_col, current_row, current_col, j)
+    #                 self.grid = Protein.build_grid(self.protein)
+    #                 for k in range(len(self.Protein.protein_list)):
+    #                     column = self.Protein.protein_list[k].column
+    #                     row = self.Protein.protein_list[k].row
+    #                     value = self.Protein.protein_list[k].value
+    #                     self.grid[row][column] = value + str(k)
+                
+    #             if pp.check_protein(self.grid, self.Protein, self.protein) <= current_score:
+    #                 print(i, "JOE",Protein.check_protein(self.grid, self.Protein, self.protein))
+    #                 continue
+
+    #             else:
+    #                 self.grid = current_grid 
+    #                 self.Protein.protein_list = current_p_list           
+                
+    #             print(self.grid)
+    #         score = Protein.check_protein(self.grid, self.Protein, self.protein) 
+    #         print(score)

@@ -9,6 +9,6 @@ import folding as ff
 
 
 if __name__ == "__main__":
-    Fold = ff.Fold()
-    Fold.hillclimber()
+    fold = ff.Fold()
+    fold.hillclimber()
 
