@@ -261,7 +261,7 @@ class Fold:
 
         T0 = 1000
         Tn = 1
-        N = 1000
+        N = 100
         # Tk = T0 - (0.9 * k)
 
         for i in range(len(self.Protein.protein_list)):
@@ -296,8 +296,9 @@ class Fold:
 
             else:
                 score_difference = pp.check_protein(self.grid, self.Protein, self.protein) - current_score
+                score_calc = score_difference * 100
                 temperature = T0 - (i*(T0 - Tn))/ N
-                prob = math.exp(-score_difference / temperature)
+                prob = math.exp(-score_calc / temperature)
                 print(score_difference, prob)
                 if prob > 0.5:
                     continue
@@ -305,7 +306,7 @@ class Fold:
                     self.grid = current_grid 
                     self.Protein.protein_list = current_p_list           
             
-            print(self.grid)
+            # print(self.grid)
         score = pp.check_protein(self.grid, self.Protein, self.protein) 
         return score
 
