@@ -1,4 +1,4 @@
-
+import hillclimber as hill
 
 proteinlist = ["HHPHHHPHPHHHPH", "HPHPPHHPHPPHPHHPPHPH", "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP", "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH", "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP", "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC", "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH", "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"]
 
@@ -8,7 +8,7 @@ for i in range(len(proteinlist)):
 proteinnumber = int(input("Hello, which protein would you like to use? "))-1
 
 print("Your choice is", proteinlist[proteinnumber])
-heuristicslist = ["Random Sampling", "Hillclimber", "Simulated Annealing", "Depthfirst"]
+heuristicslist = ["Random Sampling", "Hillclimber", "Simulated Annealing"]
 
 for i in range(len(heuristicslist)):
     print(i+1, ":", heuristicslist[i])
@@ -17,7 +17,8 @@ heuristicsnumber = int(input("Which type of heuristic would you like to use? "))
 
 print("Your choice is", heuristicslist[heuristicsnumber])
 
-hillclimber(proteinlist[proteinnumber])
+if heuristicsnumber == 1:
+    hill.hillclimber(proteinlist[proteinnumber])
 
 
 

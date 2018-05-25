@@ -129,6 +129,7 @@ class Fold:
             newrow =  copy.copy(self.Protein.protein_list[i+x-1].row) + value[0]
             newcol =  copy.copy(self.Protein.protein_list[i+x-1].column) + value[1]
             aminolegit = self.amino_check(newrow, newcol, x+i)
+            # hier hebben we toch ervoor gezorgd dat hij nooit over elkaar geplaats kan worden?
             if aminolegit == False:
                 # print("DJSodjvoiwdvnidnvwVDNVKvwed") #if optionlist is niet leeg
                 optionlist = self.optionlist(self.Protein.protein_list[i+x-1].row, self.Protein.protein_list[i+x-1].column, i+x)
@@ -216,6 +217,7 @@ class Fold:
                 self.grid[row][column] = value + str(i)
 
         for i in range(0, 100):
+            # print(self.grid)
             current_grid = copy.deepcopy(self.grid)
             current_score = pp.check_protein(self.grid, self.Protein, self.protein)
             current_p_list = copy.deepcopy(self.Protein.protein_list)
@@ -243,9 +245,8 @@ class Fold:
                 self.grid = current_grid 
                 self.Protein.protein_list = current_p_list           
             
-            # print(self.grid)
         score = pp.check_protein(self.grid, self.Protein, self.protein) 
-        # print(score)
+        print(score)
 
     def sim_anneal(self):
         ''' Ti = T0 - i(T0-Tn) / N
@@ -270,7 +271,7 @@ class Fold:
                 value = self.Protein.protein_list[i].value
                 self.grid[row][column] = value + str(i)
 
-        for i in range(0, 100):
+        for i in range(0, 1000):
             current_grid = copy.deepcopy(self.grid)
             current_score = pp.check_protein(self.grid, self.Protein, self.protein)
             current_p_list = copy.deepcopy(self.Protein.protein_list)
