@@ -6,7 +6,7 @@ De hieropvolgende codebase is geschreven in Python 3.6.3. Alle packages die nodi
 
 pip install -r requirements.txt
 
-##Structuur
+## Structuur
 
 In het Data mapje, zal alle data die nodig is voor het gebruiken van deze files te vinden zijn. 
 
@@ -14,16 +14,16 @@ In het Code mapje, zal alle code the vinden zijn die geschreven is.
 
 In het Results mapje zullen alle resultaten worden opgeslagen.
 
-##Testen
+## Testen
 
 Gebruik de volgende constructie om de code te runnen met een heuristiek naar keuze:
 
 python main.py
 
-##Auteurs
+## Auteurs
 
 Melanie Baaten 11053909
 ...
 
-##Dankwoord
+## Dankwoord
 
