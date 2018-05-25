@@ -204,49 +204,49 @@ class Fold:
         score = pp.check_protein(self.grid, self.Protein.protein_object, self.protein) 
         print(score)
 
-    def hillclimber(self): #wannabe hill climber
-    #Moet kopie van grid of van proteinlist wat?
+    # def hillclimber(self): #wannabe hill climber
+    # #Moet kopie van grid of van proteinlist wat?
 
-    #Om 's avonds te runnen:
-        # for j in range(10000): #TABTAB
+    # #Om 's avonds te runnen:
+    #     # for j in range(10000): #TABTAB
 
-        for i in range(len(self.Protein.protein_list)):
-                column = self.Protein.protein_list[i].column
-                row = self.Protein.protein_list[i].row
-                value = self.Protein.protein_list[i].value
-                self.grid[row][column] = value + str(i)
+    #     for i in range(len(self.Protein.protein_list)):
+    #             column = self.Protein.protein_list[i].column
+    #             row = self.Protein.protein_list[i].row
+    #             value = self.Protein.protein_list[i].value
+    #             self.grid[row][column] = value + str(i)
 
-        for i in range(0, 100):
-            # print(self.grid)
-            current_grid = copy.deepcopy(self.grid)
-            current_score = pp.check_protein(self.grid, self.Protein, self.protein)
-            current_p_list = copy.deepcopy(self.Protein.protein_list)
-            j = random.randint(0, (len(self.Protein.protein_list)-1))
-            if j <= 1:
-                continue
-            else: 
-                current_row = self.Protein.protein_list[j-1].row
-                current_col = self.Protein.protein_list[j-1].column
-                future_row, future_col = self.choose_option(self.optionlist(current_row, current_col, j), current_row, current_col)
-                # print(j)
-                self.fold(future_row, future_col, current_row, current_col, j)
-                self.grid = pp.build_grid(self.protein)
-                for k in range(len(self.Protein.protein_list)):
-                    column = self.Protein.protein_list[k].column
-                    row = self.Protein.protein_list[k].row
-                    value = self.Protein.protein_list[k].value
-                    self.grid[row][column] = value + str(k)
+    #     for i in range(0, 100):
+    #         # print(self.grid)
+    #         current_grid = copy.deepcopy(self.grid)
+    #         current_score = pp.check_protein(self.grid, self.Protein, self.protein)
+    #         current_p_list = copy.deepcopy(self.Protein.protein_list)
+    #         j = random.randint(0, (len(self.Protein.protein_list)-1))
+    #         if j <= 1:
+    #             continue
+    #         else: 
+    #             current_row = self.Protein.protein_list[j-1].row
+    #             current_col = self.Protein.protein_list[j-1].column
+    #             future_row, future_col = self.choose_option(self.optionlist(current_row, current_col, j), current_row, current_col)
+    #             # print(j)
+    #             self.fold(future_row, future_col, current_row, current_col, j)
+    #             self.grid = pp.build_grid(self.protein)
+    #             for k in range(len(self.Protein.protein_list)):
+    #                 column = self.Protein.protein_list[k].column
+    #                 row = self.Protein.protein_list[k].row
+    #                 value = self.Protein.protein_list[k].value
+    #                 self.grid[row][column] = value + str(k)
             
-            if pp.check_protein(self.grid, self.Protein, self.protein) <= current_score:
-                # print(i, "JOE",pp.check_protein(self.grid, self.Protein, self.protein))
-                continue
+    #         if pp.check_protein(self.grid, self.Protein, self.protein) <= current_score:
+    #             # print(i, "JOE",pp.check_protein(self.grid, self.Protein, self.protein))
+    #             continue
 
-            else:
-                self.grid = current_grid 
-                self.Protein.protein_list = current_p_list           
+    #         else:
+    #             self.grid = current_grid 
+    #             self.Protein.protein_list = current_p_list           
             
-        score = pp.check_protein(self.grid, self.Protein, self.protein) 
-        print(score)
+    #     score = pp.check_protein(self.grid, self.Protein, self.protein) 
+    #     print(score)
 
     def sim_anneal(self):
         ''' Ti = T0 - i(T0-Tn) / N

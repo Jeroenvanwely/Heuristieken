@@ -100,9 +100,7 @@ class Protein:
             # print('turn',self.protein_list[i-1].row, self.protein_list[i-1].column)
             row_t = self.protein_list[i].row - self.protein_list[i-1].row 
             col_t = self.protein_list[i].column - self.protein_list[i-1].column
-            if row_t == 0 and col_t == 0:
-                for j in range(len(self.protein_list)):
-                    print(self.protein_list[j].row, self.protein_list[j].column)
+            #HRLP
             index = positionlist.index((row_t, col_t))
             indexlist.append(index)
         return indexlist
