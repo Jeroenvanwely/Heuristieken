@@ -93,8 +93,8 @@ class Protein:
         indexlist = []
         # print(self.protein_list[:].row,self.protein_list[:].column)
         for i in range(x, len(self.protein_list)):
-            print(self.protein_list[i].row,self.protein_list[i].column)
-            print("aminozuur", i)
+            # print(self.protein_list[i].row,self.protein_list[i].column)
+            # print("aminozuur", i)
             # print(self.protein_list)
             # print('cur',self.protein_list[i].row, self.protein_list[i].column)
             # print('turn',self.protein_list[i-1].row, self.protein_list[i-1].column)
@@ -381,7 +381,7 @@ def random_alg(protein):
             max_row_list = row_list
             max_column_list = column_list
     
-    print(max_score)
+    # print(max_score)
     #print_graph(max_p_list, max_row_list, max_column_list, value_list)
 
 def bias_random_alg(protein):
@@ -409,14 +409,14 @@ def bias_random_alg(protein):
         score = check_protein(grid, buildprotein, protein)
 
         if score <= max_score:
-            print("====================================================================================")
+            # print("====================================================================================")
             #print("=" * 24) geeft zelfde
             max_score = score
             max_p_list = p_list
             max_row_list = row_list
             max_column_list = column_list
     
-    print(max_score)
+    # print(max_score)
     print_graph(max_p_list, max_row_list, max_column_list, value_list)
 
 
