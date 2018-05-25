@@ -1,6 +1,6 @@
 # Heuristieken
 
-##Vereisten
+## Vereisten
 
 De hieropvolgende codebase is geschreven in Python 3.6.3. Alle packages die nodig zijn om de code succesvol te draaien zijn te vinden in requirements.txt en kunnen gemakkelijk geintstalleerd worden d.m.v. de volgende instructie:
 
