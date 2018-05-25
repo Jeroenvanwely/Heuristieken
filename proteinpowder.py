@@ -27,6 +27,7 @@ class Protein:
         self.first = None
         self.build_protein(protein_str)
         # print(self.protein_list)
+
         
     def insert(self, value, protein_length):
 
@@ -409,6 +410,7 @@ def bias_random_alg(protein):
 
         if score <= max_score:
             print("====================================================================================")
+            #print("=" * 24) geeft zelfde
             max_score = score
             max_p_list = p_list
             max_row_list = row_list
