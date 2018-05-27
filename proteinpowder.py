@@ -118,7 +118,7 @@ def build_grid(protein):
     return grid
 
 
-def check_protein(grid, Protein, protein):
+def check_protein(grid, pro_obj, protein):
     ''' We houden de eerste node bij en checken dan alle vier de hokjes
         om hem heen. Degene die de tweede node is pakken we en daarmee
         gaan we vervolgens verder om te checken wat om hem heen staat.
@@ -128,8 +128,8 @@ def check_protein(grid, Protein, protein):
     score = 0
     checked = []
     for i in range(len(protein)):
-        row = Protein.protein_list[i].row
-        col = Protein.protein_list[i].column
+        row = pro_obj.protein_list[i].row
+        col = pro_obj.protein_list[i].column
         if 'H' in grid[row][col]:
             num = str(i+1)
             #kijk boven
@@ -356,6 +356,46 @@ def print_graph(max_p_list, max_row_list, max_column_list, value_list):
     plt.legend(recs,classes,loc=1)
     plt.show()
 
+def print_graph2(max_p_list):
+    plt.style.use('seaborn-whitegrid')
+    max_row_list = []
+    max_column_list = []
+    value_list = []
+    for i in range(len(max_p_list)):
+        max_row_list.append(max_p_list[i].row)
+        max_column_list.append(max_p_list[i].column)
+        value_list.append(max_p_list[i].value)
+
+    lowest_row, highest_row, lowest_column, highest_column = grid_boundaries(max_p_list)
+    if highest_row - lowest_row >= highest_column - lowest_column:
+        plt.axis([lowest_row, highest_row, lowest_column, lowest_column + highest_row - lowest_row]) 
+    else:
+        plt.axis([lowest_row, lowest_row + highest_column - lowest_column, lowest_column, highest_column])
+
+    colors = {
+        'H' : 'r', 
+        'P' : 'b',
+        'C' : 'purple',
+        }
+    
+    df = {
+        'x': max_row_list, 
+        'y': max_column_list, 
+        's': 300, 
+        'group': [colors[x] for x in value_list]
+        }
+
+    plt.plot(df['x'], df['y'], zorder=1)
+    plt.scatter(df['x'], df['y'], df['s'], c=df['group'], zorder=2)
+    
+    classes = ['H','P', 'C']
+    class_colours = ['r','b','purple']
+    recs = []
+    for i in range(0,len(class_colours)):
+        recs.append(mpatches.Rectangle((0,0),1,1,fc=class_colours[i]))
+    plt.legend(recs,classes,loc=1)
+    plt.show()
+
 def random_alg(protein):
     max_score = 0
     for i in range(100000):
@@ -422,68 +462,24 @@ def bias_random_alg(protein):
 
 
 if __name__ == "__main__":
-    protein = "HHPHHHPHPHHHPH"
-    for i in range(10):    
-        startTime = datetime.now()
-        random_alg(protein)
-        print(datetime.now() - startTime)
-    print("===============NEXT================")
-    protein = "HPHPPHHPHPPHPHHPPHPH"
-    for i in range(10):    
-        startTime = datetime.now()
-        random_alg(protein)
-        print(datetime.now() - startTime)
-    print("===============NEXT================")
-    protein = "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP"
-    for i in range(10):    
-        startTime = datetime.now()
-        random_alg(protein)
-        print(datetime.now() - startTime)
-    print("===============NEXT================")
-    protein = "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH"
-    for i in range(10):    
-        startTime = datetime.now()
-        random_alg(protein)
-        print(datetime.now() - startTime)
-    print("===============NEXT================")
-    protein = "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP"
-    for i in range(10):    
-        startTime = datetime.now()
-        random_alg(protein)
-        print(datetime.now() - startTime)
-    print("===============NEXT================")
-    protein = "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC"
-    for i in range(10):    
-        startTime = datetime.now()
-        random_alg(protein)
-        print(datetime.now() - startTime)
-    print("===============NEXT================")
-    protein = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
-    for i in range(10):    
-        startTime = datetime.now()
-        random_alg(protein)
-        print(datetime.now() - startTime)
-    print("===============NEXT================")
-    protein = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
-    for i in range(10):    
-        startTime = datetime.now()
-        random_alg(protein)
-        print(datetime.now() - startTime)
-    # buildprotein = Protein(protein)
-    # p_list = buildprotein.protein_list
-    # row_list, column_list = random_structure2(p_list)
-    # # while check_for_collision(row_list, column_list) == False:
-    # #     row_list, column_list = random_structure(p_list)
-    # grid = build_grid(protein)
+    protein = "HHPHHHPHPHHHPH"    
+    buildprotein = Protein(protein)
+    p_list = buildprotein.protein_list
+    row_list, column_list = random_structure(p_list)
+    while check_for_collision(row_list, column_list) == False:
+        row_list, column_list = random_structure(p_list)
+    grid = build_grid(protein)
+
     
-    # value_list = []
-    # for i in range(len(p_list)):
-    #     column = p_list[i].column
-    #     row = p_list[i].row
-    #     value = p_list[i].value
-    #     value_list.append(value)
-    #     grid[row][column] = value + str(i)
-    
-    # score = check_protein(grid, buildprotein, protein)
-    # print(score)
-    # print_graph(p_list, row_list, column_list, value_list)
+    value_list = []
+    for i in range(len(p_list)):
+        column = p_list[i].column
+        row = p_list[i].row
+        value = p_list[i].value
+        value_list.append(value)
+        grid[row][column] = value + str(i)
+
+    score = check_protein(grid, buildprotein, protein)
+    print(score)
+    print_graph(p_list, row_list, column_list, value_list)
+    print_graph2(p_list)
