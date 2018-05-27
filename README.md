@@ -1,4 +1,4 @@
-# Heuristieken
+# Proteinpowder
 
 ## Vereisten
 
