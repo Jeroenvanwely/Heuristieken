@@ -29,7 +29,11 @@ def choose_random_option(option_list):
         option -= 1
     return option
 
-def grid_boundaries(pro_obj):
+def graph_boundaries(pro_obj):
+    ''' Om de visualisatie duidelijker te maken wordt het zicht van de graph 
+        gecentreerd op alleen op waar de proteine zich bevind. 
+        Hier zijn de uiterste x en y coordinaten voor nodig die worden hier gevonden
+    '''
     lowest_row = 100
     highest_row = 0
     lowest_column = 100
@@ -48,6 +52,8 @@ def grid_boundaries(pro_obj):
     return lowest_row-1, highest_row+1, lowest_column-1, highest_column+1
 
 def print_graph(pro_obj):
+    ''' De graph met de structuur van het proteine wordt hier geprint.
+    '''
     plt.style.use('seaborn-whitegrid')
     max_row_list = []
     max_column_list = []
@@ -57,7 +63,7 @@ def print_graph(pro_obj):
         max_column_list.append(pro_obj.protein_list[i].column)
         value_list.append(pro_obj.protein_list[i].value)
 
-    lowest_row, highest_row, lowest_column, highest_column = grid_boundaries(pro_obj)
+    lowest_row, highest_row, lowest_column, highest_column = graph_boundaries(pro_obj)
     if highest_row - lowest_row >= highest_column - lowest_column:
         plt.axis([lowest_row, highest_row, lowest_column, lowest_column + highest_row - lowest_row]) 
     else:
@@ -92,7 +98,8 @@ def check_protein(grid, pro_obj):
         om hem heen. Degene die de tweede node is pakken we en daarmee
         gaan we vervolgens verder om te checken wat om hem heen staat.
         Bij elke H die we gecheckt hebben voegen we deze toe aan een lijst
-        zodat dubbele tellingen voorkomen worden.'''
+        zodat dubbele tellingen voorkomen worden.
+    '''
 
     score = 0
     checked = []
