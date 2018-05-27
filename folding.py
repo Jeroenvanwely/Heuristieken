@@ -11,7 +11,7 @@ class Fold:
     def __init__(self, protein):
         self.protein = protein
         self.Protein = pp.Protein(self.protein)
-        self.grid = pp.build_grid(self.protein)
+        self.grid = helpe.insert_protein(self.Protein)
         self.Protein.protein_list = copy.deepcopy(pp.Protein(self.protein).protein_list)
                 
 

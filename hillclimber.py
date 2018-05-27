@@ -20,12 +20,12 @@ def hillclimber(protein):
     '''
 
     fold = ff.Fold(protein)
-    helpe.insert_protein(fold)
+    helpe.insert_protein(fold.Protein)
 
     for i in range(500):
         # Maak kopie van huidige staat voor latere vergelijkingen
         current_grid = copy.deepcopy(fold.grid)
-        current_score = pp.check_protein(fold.grid, fold.Protein, fold.protein)
+        current_score = helpe.check_protein(fold.grid, fold.Protein)
         current_p_list = copy.deepcopy(fold.Protein.protein_list)
         
         # Kies een random plek om te vouwen en kies een random optie om naar te vouwen
@@ -37,17 +37,16 @@ def hillclimber(protein):
 
         # Vouw en zet in het grid
         fold.fold(future_row, future_col, current_row, current_col, j)
-        fold.grid = pp.build_grid(fold.protein)
-        helpe.insert_protein(fold)
+        fold.grid = helpe.insert_protein(fold.Protein)
         
         # Is de score beter? Ga door. Anders ga terug naar oude staat
-        if pp.check_protein(fold.grid, fold.Protein, fold.protein) <= current_score:
+        if helpe.check_protein(fold.grid, fold.Protein) <= current_score:
             continue
         else:
             fold.grid = current_grid 
             fold.Protein.protein_list = current_p_list           
         
-    score = pp.check_protein(fold.grid, fold.Protein, fold.protein)
+    score = helpe.check_protein(fold.grid, fold.Protein)
     # pp.print_graph2(fold.Protein.protein_list)
 
 
