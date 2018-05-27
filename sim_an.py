@@ -62,7 +62,7 @@ def sim_anneal(protein):
             temperature = T0 - (i*(T0 - Tn))/ N
             prob = math.exp(-score_calc / temperature)
             print(score_difference,temperature, prob)
-            if prob > 0.5:
+            if round(prob*100) > random.randint(0,100):
                 continue
             else:
                 fold.grid = current_grid 
