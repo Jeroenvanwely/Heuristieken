@@ -19,9 +19,10 @@ def hillclimber(protein):
         score in de vorm van een integer terug.
     '''
 
+    fold = ff.Fold(protein)
     helpe.insert_protein(fold)
 
-    for i in range(0, 100):
+    for i in range(500):
         # Maak kopie van huidige staat voor latere vergelijkingen
         current_grid = copy.deepcopy(fold.grid)
         current_score = pp.check_protein(fold.grid, fold.Protein, fold.protein)
@@ -32,7 +33,8 @@ def hillclimber(protein):
         current_row = fold.Protein.protein_list[j-1].row
         current_col = fold.Protein.protein_list[j-1].column
         future_row, future_col = fold.choose_option(fold.optionlist(current_row, current_col, j), current_row, current_col)
-        
+        # print(current_row, current_col, future_row, future_col)
+
         # Vouw en zet in het grid
         fold.fold(future_row, future_col, current_row, current_col, j)
         fold.grid = pp.build_grid(fold.protein)
@@ -45,7 +47,14 @@ def hillclimber(protein):
             fold.grid = current_grid 
             fold.Protein.protein_list = current_p_list           
         
-    score = pp.check_protein(fold.grid, fold.Protein, fold.protein) 
+    score = pp.check_protein(fold.grid, fold.Protein, fold.protein)
+    # pp.print_graph2(fold.Protein.protein_list)
+
+
+    # rowlist = []
+    # for i in range(len(Protein.protein_list)):
+    #     rowlist.append()
+
     return score
 
 if __name__ == "__main__":
@@ -61,13 +70,17 @@ if __name__ == "__main__":
     # print(score)
     # print(protein.protein_list[3].row)
 
-    for i in range(len(proteinlist)):
-        for j in range(100):
-            fold = ff.Fold(proteinlist[i])
-            score = hillclimber(proteinlist[i])
+    fold = ff.Fold(proteinlist[0])
+    score = hillclimber(proteinlist[0])
+    print(score)
 
-            results = os.path.abspath('Results/h_results' +str(i) + '.csv') 
-            with open(results, 'a') as data: #add data
-                data.write(str(score) + '\n')
+    # for i in range(len(proteinlist)):
+    #     for j in range(100):
+    #         fold = ff.Fold(proteinlist[i])
+    #         score = hillclimber(proteinlist[i])
+
+    #         results = os.path.abspath('Results/h_results' +str(i) + '.csv') 
+    #         with open(results, 'a') as data: #add data
+    #             data.write(str(score) + '\n')
 
 
