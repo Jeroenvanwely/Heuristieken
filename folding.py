@@ -119,6 +119,9 @@ class Fold:
 
     
         switch = True
+        begin_conf = copy.deepcopy(self.Protein.protein_list)
+        begin_grid = copy.deepcopy(self.grid)
+        print(self.grid)
 
         for i in range(1, len(indexlist)):
             temp_p = copy.deepcopy(self.Protein.protein_list)
@@ -133,6 +136,10 @@ class Fold:
             if aminolegit == False:
                 # print("DJSodjvoiwdvnidnvwVDNVKvwed") #if optionlist is niet leeg
                 optionlist = self.optionlist(self.Protein.protein_list[i+x-1].row, self.Protein.protein_list[i+x-1].column, i+x)
+                if optionlist == []:
+                    self.Protein.protein_list = begin_conf
+                    self.grid = begin_grid
+                    return
                 # print(optionlist, "optionlist")
                 newtryrow, newtrycol = self.choose_option(optionlist, self.Protein.protein_list[i+x-1].row, self.Protein.protein_list[i+x-1].column)
                 # print(newtryrow, newtrycol)
@@ -141,6 +148,7 @@ class Fold:
             else:
                 self.Protein.protein_list[i+x].row = newrow
                 self.Protein.protein_list[i+x].column = newcol
+        # print(self.grid)
          
 
     def get_straight(self):
