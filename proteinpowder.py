@@ -182,85 +182,85 @@ def choose_random_option(option_list):
         option -= 1
     return option
 
-def check_location2(option_list, row_column_list):
-    # en check of deze positie al bezet is
-    uni = False
-    row = 0
-    column = 0
-    # Zolang niet een positie gevonden is
-    while uni == False:
-        # kies een random row met zijn bijbehorende column uit option_list
-        option = choose_random_option(option_list)
-        if option % 2 != 0:
-            option -= 1
-        # check of deze positie al bezet is
-        for i in range(0, len(row_column_list), 2):
-            # als postie bezet is, break
-            if option_list[option] == row_column_list[i] and option_list[option+1] == row_column_list[i+1]:
-                break
-            # als positie vrij is, sla deze row en col op
-            if i == len(row_column_list)-2: 
-                uni = True
-                row = option_list[option]
-                column = option_list[option+1]
-    return row, column
+# def check_location2(option_list, row_column_list):
+#     # en check of deze positie al bezet is
+#     uni = False
+#     row = 0
+#     column = 0
+#     # Zolang niet een positie gevonden is
+#     while uni == False:
+#         # kies een random row met zijn bijbehorende column uit option_list
+#         option = choose_random_option(option_list)
+#         if option % 2 != 0:
+#             option -= 1
+#         # check of deze positie al bezet is
+#         for i in range(0, len(row_column_list), 2):
+#             # als postie bezet is, break
+#             if option_list[option] == row_column_list[i] and option_list[option+1] == row_column_list[i+1]:
+#                 break
+#             # als positie vrij is, sla deze row en col op
+#             if i == len(row_column_list)-2: 
+#                 uni = True
+#                 row = option_list[option]
+#                 column = option_list[option+1]
+#     return row, column
 
-def random_structure2(p_list):
-    option_list = []
-    row_list = []
-    column_list = []
-    row_column_list = []
-    switch = False
-    # kies een random beginpunt in de proteine
-    starting_index = random.randint(0, (len(p_list) - 1))
-    idx = starting_index
-    for i in range(len(p_list)+1):
+# def random_structure2(p_list):
+#     option_list = []
+#     row_list = []
+#     column_list = []
+#     row_column_list = []
+#     switch = False
+#     # kies een random beginpunt in de proteine
+#     starting_index = random.randint(0, (len(p_list) - 1))
+#     idx = starting_index
+#     for i in range(len(p_list)+1):
         
-        # eerste mag gelijk geplaatst worden   
-        if i == 0:
-            row_list.append(p_list[idx].row)
-            column_list.append(p_list[idx].column)
-            row_column_list.append(p_list[idx].row)
-            row_column_list.append(p_list[idx].column)
+#         # eerste mag gelijk geplaatst worden   
+#         if i == 0:
+#             row_list.append(p_list[idx].row)
+#             column_list.append(p_list[idx].column)
+#             row_column_list.append(p_list[idx].row)
+#             row_column_list.append(p_list[idx].column)
         
-        else:
-            # sla de row en column van het voorgaande aminozuur tijdelijk op
-            if switch == False:
-                row = p_list[idx-1].row
-                column = p_list[idx-1].column
-            else:
-                row = p_list[idx+1].row
-                column = p_list[idx+1].column
+#         else:
+#             # sla de row en column van het voorgaande aminozuur tijdelijk op
+#             if switch == False:
+#                 row = p_list[idx-1].row
+#                 column = p_list[idx-1].column
+#             else:
+#                 row = p_list[idx+1].row
+#                 column = p_list[idx+1].column
             
             
-            # maak een lijst met alle mogelijkheiden rondom het voorgaande aminozuur
-            option_list.extend((row-1, column, row+1, column, row, column-1, row, column+1))
+#             # maak een lijst met alle mogelijkheiden rondom het voorgaande aminozuur
+#             option_list.extend((row-1, column, row+1, column, row, column-1, row, column+1))
             
-            # vind een vrije row en column om op te plaatsen
-            row, column = check_location2(option_list, row_column_list)
+#             # vind een vrije row en column om op te plaatsen
+#             row, column = check_location2(option_list, row_column_list)
             
-            # plaats de gekozen row en column in de bijbehorden node in de p_list
-            p_list[idx].row = row
-            p_list[idx].column = column
+#             # plaats de gekozen row en column in de bijbehorden node in de p_list
+#             p_list[idx].row = row
+#             p_list[idx].column = column
             
-            # plaats nieuwe row en column in row_list en column_list
-            row_list.append(p_list[idx].row)
-            column_list.append(p_list[idx].column)
-            row_column_list.append(row)
-            row_column_list.append(column)
+#             # plaats nieuwe row en column in row_list en column_list
+#             row_list.append(p_list[idx].row)
+#             column_list.append(p_list[idx].column)
+#             row_column_list.append(row)
+#             row_column_list.append(column)
             
-            # leeg de option_list
-            option_list = []
+#             # leeg de option_list
+#             option_list = []
             
-            # ga naar de volgende index
-            if idx < len(p_list) - 1 and switch == False:
-                idx += 1
-            elif switch == True:
-                idx -= 1 
-            else:
-                idx = starting_index - 1
-                switch = True
-    return row_list, column_list
+#             # ga naar de volgende index
+#             if idx < len(p_list) - 1 and switch == False:
+#                 idx += 1
+#             elif switch == True:
+#                 idx -= 1 
+#             else:
+#                 idx = starting_index - 1
+#                 switch = True
+#     return row_list, column_list
 
 def check_for_collision(row_list, column_list):
     for i in range(len(row_list)):
@@ -323,40 +323,40 @@ def grid_boundaries(max_p_list):
 
     return lowest_row-1, highest_row+1, lowest_column-1, highest_column+1
 
-def print_graph(max_p_list, max_row_list, max_column_list, value_list):
-    plt.style.use('seaborn-whitegrid')
+# def print_graph(max_p_list, max_row_list, max_column_list, value_list):
+#     plt.style.use('seaborn-whitegrid')
 
-    lowest_row, highest_row, lowest_column, highest_column = grid_boundaries(max_p_list)
-    if highest_row - lowest_row >= highest_column - lowest_column:
-        plt.axis([lowest_row, highest_row, lowest_column, lowest_column + highest_row - lowest_row]) 
-    else:
-        plt.axis([lowest_row, lowest_row + highest_column - lowest_column, lowest_column, highest_column])
+#     lowest_row, highest_row, lowest_column, highest_column = grid_boundaries(max_p_list)
+#     if highest_row - lowest_row >= highest_column - lowest_column:
+#         plt.axis([lowest_row, highest_row, lowest_column, lowest_column + highest_row - lowest_row]) 
+#     else:
+#         plt.axis([lowest_row, lowest_row + highest_column - lowest_column, lowest_column, highest_column])
 
-    colors = {
-        'H' : 'r', 
-        'P' : 'b',
-        'C' : 'purple',
-        }
+#     colors = {
+#         'H' : 'r', 
+#         'P' : 'b',
+#         'C' : 'purple',
+#         }
     
-    df = {
-        'x': max_row_list, 
-        'y': max_column_list, 
-        's': 300, 
-        'group': [colors[x] for x in value_list]
-        }
+#     df = {
+#         'x': max_row_list, 
+#         'y': max_column_list, 
+#         's': 300, 
+#         'group': [colors[x] for x in value_list]
+#         }
 
-    plt.plot(df['x'], df['y'], zorder=1)
-    plt.scatter(df['x'], df['y'], df['s'], c=df['group'], zorder=2)
+#     plt.plot(df['x'], df['y'], zorder=1)
+#     plt.scatter(df['x'], df['y'], df['s'], c=df['group'], zorder=2)
     
-    classes = ['H','P', 'C']
-    class_colours = ['r','b','purple']
-    recs = []
-    for i in range(0,len(class_colours)):
-        recs.append(mpatches.Rectangle((0,0),1,1,fc=class_colours[i]))
-    plt.legend(recs,classes,loc=1)
-    plt.show()
+#     classes = ['H','P', 'C']
+#     class_colours = ['r','b','purple']
+#     recs = []
+#     for i in range(0,len(class_colours)):
+#         recs.append(mpatches.Rectangle((0,0),1,1,fc=class_colours[i]))
+#     plt.legend(recs,classes,loc=1)
+#     plt.show()
 
-def print_graph2(max_p_list):
+def print_graph(max_p_list):
     plt.style.use('seaborn-whitegrid')
     max_row_list = []
     max_column_list = []
@@ -422,52 +422,52 @@ def random_alg(protein):
             max_row_list = row_list
             max_column_list = column_list
     
-    # print(max_score)
-    #print_graph(max_p_list, max_row_list, max_column_list, value_list)
-
-def bias_random_alg(protein):
-    max_score = 0
-    row_list = []
-    column_list = []
-    for i in range(1000):
-        buildprotein = Protein(protein)
-        p_list = buildprotein.protein_list
-
-        Fold = ff.Fold()
-        Fold.get_fold()
-
-        grid = build_grid(protein)
-        value_list = []
-        for j in range(len(p_list)):
-            column = p_list[j].column
-            column_list.append(column)
-            row = p_list[j].row
-            row_list.append(row)
-            value = p_list[j].value
-            value_list.append(value)
-            grid[row][column] = value + str(j)
-
-        score = check_protein(grid, buildprotein, protein)
-
-        if score <= max_score:
-            # print("====================================================================================")
-            #print("=" * 24) geeft zelfde
-            max_score = score
-            max_p_list = p_list
-            max_row_list = row_list
-            max_column_list = column_list
-    
-    # print(max_score)
+    print(max_score)
     print_graph(max_p_list, max_row_list, max_column_list, value_list)
+
+# def bias_random_alg(protein):
+#     max_score = 0
+#     row_list = []
+#     column_list = []
+#     for i in range(1000):
+#         buildprotein = Protein(protein)
+#         p_list = buildprotein.protein_list
+
+#         Fold = ff.Fold()
+#         Fold.get_fold()
+
+#         grid = build_grid(protein)
+#         value_list = []
+#         for j in range(len(p_list)):
+#             column = p_list[j].column
+#             column_list.append(column)
+#             row = p_list[j].row
+#             row_list.append(row)
+#             value = p_list[j].value
+#             value_list.append(value)
+#             grid[row][column] = value + str(j)
+
+#         score = check_protein(grid, buildprotein, protein)
+
+#         if score <= max_score:
+#             # print("====================================================================================")
+#             #print("=" * 24) geeft zelfde
+#             max_score = score
+#             max_p_list = p_list
+#             max_row_list = row_list
+#             max_column_list = column_list
+    
+#     # print(max_score)
+#     print_graph(max_p_list, max_row_list, max_column_list, value_list)
 
 
 if __name__ == "__main__":
     protein = "HHPHHHPHPHHHPH"    
     buildprotein = Protein(protein)
     p_list = buildprotein.protein_list
-    row_list, column_list = random_structure(p_list)
-    while check_for_collision(row_list, column_list) == False:
-        row_list, column_list = random_structure(p_list)
+    # row_list, column_list = random_structure(p_list)
+    # while check_for_collision(row_list, column_list) == False:
+    #     row_list, column_list = random_structure(p_list)
     grid = build_grid(protein)
 
     
@@ -481,5 +481,4 @@ if __name__ == "__main__":
 
     score = check_protein(grid, buildprotein, protein)
     print(score)
-    print_graph(p_list, row_list, column_list, value_list)
-    print_graph2(p_list)
+    print_graph(p_list)
