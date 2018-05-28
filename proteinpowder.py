@@ -9,10 +9,10 @@ import folding as ff
 from datetime import datetime
 
 
-class Node:
+class Aminode:
     def  __init__(self, value):
-        ''' Initialiseert een node en vult zijn value in. Zet zijn row
-            en column op none.
+        ''' Initialiseert een node en vult zijn value in. Neemt een string
+            als argument.
         '''
         self.value = value
         self.row = None
@@ -20,20 +20,22 @@ class Node:
 
 class Protein:
     def __init__(self, protein_str, head_node = None):
+        ''' Initialiseert een proteine object vult alle aminodes in. Neemt een
+            string als argument.
+        '''
         self.last = None
         self.protein_list = []
         self.first = None
         self.build_protein(protein_str)
-        # print(self.protein_list)
-
-        
+     
     def insert(self, value, protein_length):
+
         ''' Als er nog geen laatste node is dan voeg er een toe en maak
             hem de laatste node. Als er wel al een laatste node is dan voeg
             een kolom verder de nieuwe node toe en maak deze node vervolgens 
             de laatste node.
         '''
-        node = Node(value)
+        node = Aminode(value)
         if self.last is None:
             self.first = node
             node.column = protein_length // 2 
@@ -55,7 +57,30 @@ class Protein:
         protein_length = len(protein)
         for i in range (protein_length):
             self.insert(protein[i], protein_length)
+            print(self.protein_list[i].row, self.protein_list[i].column)
         return self
+
+    # def build_protein(self, protein):
+    #     ''' Build_protein neemt een string die staat voor het proteine als argument 
+    #         en plaatst alle aminodes stuk voor stuk in een array. Returnt het proteine
+    #         object.
+    #     '''
+    #     for i in range (len(protein)):
+    #         node = Aminode(protein[i])
+    #         if self.last is None:
+    #             self.first = node
+    #             node.column = len(self.protein_list) // 2 
+    #             self.first.column = node.column
+    #         else:
+    #             node.column = self.last.column + 1
+    #         node.row = len(self.protein_list) - 1
+    #         if self.last is None:
+    #             self.first.row = node.row
+    #         self.last = node
+    #         self.protein_list.append(node)
+
+    #         print(self.protein_list[i].row, self.protein_list[i].column)
+    #     return self
 
     def position(self, x):
         ''' Deze checkt wat de positie is van het huidige aminozuur ten opzichte van
@@ -75,6 +100,7 @@ class Protein:
 
 
 def random_alg(protein):
+
     max_score = 0
     for i in range(100000):
         buildprotein = Protein(protein)

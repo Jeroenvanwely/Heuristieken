@@ -12,7 +12,6 @@ class Fold:
         self.protein = protein
         self.Protein = pp.Protein(self.protein)
         self.grid = helpe.insert_protein(self.Protein)
-        self.Protein.protein_list = copy.deepcopy(pp.Protein(self.protein).protein_list)
                 
 
     def optionlist(self, row, col, x):
@@ -94,8 +93,11 @@ class Fold:
         return True
 
     def amino_check(self, future_row, future_col, x):
+        # print("x", self.Protein.protein_list[x].row, self.Protein.protein_list[x].column)
         for i in range(x):
+            # print(self.Protein.protein_list[i].row, self.Protein.protein_list[i].column)
             if self.Protein.protein_list[i].row == future_row and self.Protein.protein_list[i].column == future_col:
+                # print("HOI")
                 return False
         return True
             
@@ -174,13 +176,6 @@ class Fold:
         #     print(self.Protein.protein_list[i].row, self.Protein.protein_list[i].column)
         # # print(self.grid)
          
-
-    def get_straight(self):
-        for i in range(len(self.Protein.protein_list)):
-            column = self.Protein.protein_list[i].column
-            row = self.Protein.protein_list[i].row
-            value = self.Protein.protein_list[i].value
-            self.grid[row][column] = value + str(i)
 
     def getgetfold(self):
         muts = []

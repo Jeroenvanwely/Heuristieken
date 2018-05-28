@@ -41,8 +41,8 @@ def choose_random_option(option_list):
     return option
 
 def graph_boundaries(pro_obj):
-    ''' Graph_boundaries neemt een proteine object als argument en maakt vervolgens
-        een visualisatie aan de hand van de locatie van de aminozuren. 
+    ''' Graph_boundaries neemt een proteine object als argument en bepaald vervolgens
+        de grenzen van de visualisatie aan de hand van de locatie van de aminozuren. 
         Returnt de hoogste en laagste waarden van zowel de row en de column met een
         speling van 1 aan alle kanten
     '''
@@ -64,12 +64,15 @@ def graph_boundaries(pro_obj):
     return lowest_row-1, highest_row+1, lowest_column-1, highest_column+1
 
 def print_graph(pro_obj):
-    ''' De graph met de structuur van het proteine wordt hier geprint.
+    ''' Print_graph neemt een proteine object als argument en maakt vervolgens aan de
+        hand van de locatie van de aminozuren een visualisatie. Het maakt gebruik van
+        graph_boundaries om te bepalen waar de grenzen van de visualisatie liggen.
     '''
     plt.style.use('seaborn-whitegrid')
     max_row_list = []
     max_column_list = []
     value_list = []
+
     for i in range(len(pro_obj.protein_list)):
         max_row_list.append(pro_obj.protein_list[i].row)
         max_column_list.append(pro_obj.protein_list[i].column)
@@ -100,8 +103,10 @@ def print_graph(pro_obj):
     classes = ['H','P', 'C']
     class_colours = ['r','b','purple']
     recs = []
+
     for i in range(0,len(class_colours)):
         recs.append(mpatches.Rectangle((0,0),1,1,fc=class_colours[i]))
+    
     plt.legend(recs,classes,loc=1)
     plt.show()
 

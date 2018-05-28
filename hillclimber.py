@@ -69,8 +69,8 @@ if __name__ == "__main__":
     # print(score)
     # print(protein.protein_list[3].row)
 
-    fold = ff.Fold(proteinlist[0])
-    score = hillclimber(proteinlist[0])
+    # fold = ff.Fold(proteinlist[1])
+    score = hillclimber(proteinlist[1])
     print(score)
 
     # for i in range(len(proteinlist)):
