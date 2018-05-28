@@ -23,7 +23,7 @@ def sim_anneal(protein):
 
     T0 = 1000
     Tn = 1
-    N = 100
+    N = 1000
     # Tk = T0 - (0.9 * k)
 
     for i in range(len(fold.Protein.protein_list)):
@@ -32,9 +32,9 @@ def sim_anneal(protein):
             value = fold.Protein.protein_list[i].value
             fold.grid[row][column] = value + str(i)
 
-    for i in range(0, 100):
+    for i in range(0, 1000):
         current_grid = copy.deepcopy(fold.grid)
-        current_score = pp.check_protein(fold.grid, fold.Protein, fold.protein)
+        current_score = helpe.check_protein(fold.grid, fold.Protein)
         current_p_list = copy.deepcopy(fold.Protein.protein_list)
         j = random.randint(0, (len(fold.Protein.protein_list)-1))
         if j <= 1:
@@ -45,19 +45,19 @@ def sim_anneal(protein):
             future_row, future_col = fold.choose_option(fold.optionlist(current_row, current_col, j), current_row, current_col)
             # print(j)
             fold.fold(future_row, future_col, current_row, current_col, j)
-            fold.grid = pp.build_grid(fold.protein)
+            fold.grid = helpe.insert_protein(fold.Protein)
             for k in range(len(fold.Protein.protein_list)):
                 column = fold.Protein.protein_list[k].column
                 row = fold.Protein.protein_list[k].row
                 value = fold.Protein.protein_list[k].value
                 fold.grid[row][column] = value + str(k)
         
-        if pp.check_protein(fold.grid, fold.Protein, fold.protein) <= current_score:
+        if helpe.check_protein(fold.grid, fold.Protein) <= current_score:
             # print(i, "JOE",pp.check_protein(fold.grid, fold.Protein, fold.protein))
             continue
 
         else:
-            score_difference = pp.check_protein(fold.grid, fold.Protein, fold.protein) - current_score
+            score_difference = helpe.check_protein(fold.grid, fold.Protein) - current_score
             score_calc = score_difference * 100
             temperature = T0 - (i*(T0 - Tn))/ N
             prob = math.exp(-score_calc / temperature)
@@ -69,7 +69,7 @@ def sim_anneal(protein):
                 fold.Protein.protein_list = current_p_list           
         
         # print(fold.grid)
-    score = pp.check_protein(fold.grid, fold.Protein, fold.protein) 
+    score = helpe.check_protein(fold.grid, fold.Protein) 
     return score
 
 if __name__ == "__main__":

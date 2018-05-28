@@ -90,14 +90,14 @@ class Protein:
 
         positionlist = [(0,1), (-1,0), (0,-1), (1,0)]
         indexlist = []
-        try:
-            for i in range(x, len(self.protein_list)):
-                row_t = self.protein_list[i].row - self.protein_list[i-1].row 
-                col_t = self.protein_list[i].column - self.protein_list[i-1].column
-                index = positionlist.index((row_t, col_t))
-                indexlist.append(index)
-        except ValueError:
-            return 5
+        # try:
+        for i in range(x, len(self.protein_list)):
+            row_t = self.protein_list[i].row - self.protein_list[i-1].row 
+            col_t = self.protein_list[i].column - self.protein_list[i-1].column
+            index = positionlist.index((row_t, col_t))
+            indexlist.append(index)
+        # except ValueError:
+        #     return 5
         return indexlist
 
 
