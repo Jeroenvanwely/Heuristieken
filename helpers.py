@@ -9,6 +9,13 @@ import proteinpowder as pp
 import copy
 
 def insert_protein(pro_obj):
+    ''' Insert_protein neemt een Proteine object als argument en maakt aan de
+        hand van de lengte van het proteine een grid. Vervolgens plaatst hij het
+        proteine ook in het grid.
+        Returnt een ingevulde grid.
+    '''
+
+    # Het maken van het grid
     if len(pro_obj.protein_list) % 2 == 0:
         grid_length = 2*len(pro_obj.protein_list)
     else:
@@ -16,6 +23,7 @@ def insert_protein(pro_obj):
     grid = np.chararray((grid_length, grid_length), itemsize = 3, unicode=True)
     grid[:] = '_'
     
+    # Het plaatsen van het proteine in de grid
     for i in range(len(pro_obj.protein_list)):
         column = pro_obj.protein_list[i].column
         row = pro_obj.protein_list[i].row
@@ -24,15 +32,19 @@ def insert_protein(pro_obj):
     return grid
 
 def choose_random_option(option_list):
+    ''' Choose_random_option neemt een lijst als argument en returnt vervolgens
+        een random integer tussen 0 en de lengte van die gegeven lijst.
+    '''
     option = random.randint(0, (len(option_list) - 1))
     if option%2 != 0:
         option -= 1
     return option
 
 def graph_boundaries(pro_obj):
-    ''' Om de visualisatie duidelijker te maken wordt het zicht van de graph 
-        gecentreerd op alleen op waar de proteine zich bevind. 
-        Hier zijn de uiterste x en y coordinaten voor nodig die worden hier gevonden
+    ''' Graph_boundaries neemt een proteine object als argument en maakt vervolgens
+        een visualisatie aan de hand van de locatie van de aminozuren. 
+        Returnt de hoogste en laagste waarden van zowel de row en de column met een
+        speling van 1 aan alle kanten
     '''
     lowest_row = 100
     highest_row = 0
@@ -109,9 +121,7 @@ def check_protein(grid, pro_obj):
         if 'H' in grid[row][col]:
             num = str(i+1)
             for j in [-1, 1]:
-                #kijk boven of beneden
-
-                # ALS GEKKE ERROR HEB HIWER ENTER GEDAAN IN IF STATEMENT
+                #kijk boven of beneden of er CH of HH verbinding is, wijzig score.
                 if (('H' in grid[row+j][col] or 'C' in grid[row+j][col]) 
                     and num not in grid[row+j][col] and grid[row+j][col] not in checked):
                     score-=1
@@ -124,14 +134,14 @@ def check_protein(grid, pro_obj):
         if 'C' in grid[row][col]:
             num = str(i+1)
             for j in [-1, 1]:
-                #kijk boven en beneden
+                #kijk boven en beneden of er CH of CC verbinding is, wijzig score.
                 if (('H' in grid[row+j][col] or 'C' in grid[row+j][col]) 
                     and num not in grid[row+j][col] and grid[row+j][col] not in checked):
                     if 'H' in grid[row+j][col]:    
                         score-=1
                     elif 'C' in grid[row+j][col]:
                         score-=5
-                # kijk links
+                # kijk links en rechts
                 if (('H' in grid[row][col+j] or 'C' in grid[row+j][col]) 
                     and num not in grid[row][col+j] and grid[row][col+j] not in checked):
                     if 'H' in grid[row][col+j]:    
