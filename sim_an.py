@@ -57,8 +57,7 @@ def sim_anneal(protein):
         
         if helpe.check_protein(fold.grid, fold.Protein) <= current_score:
             highscore = copy.copy(helpe.check_protein(fold.grid, fold.Protein))
-            highproteinlist = 
-            # print(i, "JOE",pp.check_protein(fold.grid, fold.Protein, fold.protein))
+            highproteinlist = copy.deepcopy(fold.Protein.protein_list)
             continue
 
         else:
@@ -66,14 +65,12 @@ def sim_anneal(protein):
             score_calc = score_difference * 100
             temperature = T0 - (i*(T0 - Tn))/ N
             prob = math.exp(-score_calc / temperature)
-            # print(score_difference,temperature, prob)
             if prob > random.random():
                 continue
             else:
                 fold.grid = current_grid 
                 fold.Protein.protein_list = current_p_list           
         
-        # print(fold.grid)
     score = helpe.check_protein(fold.grid, fold.Protein) 
     return score
 
