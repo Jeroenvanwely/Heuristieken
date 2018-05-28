@@ -10,8 +10,8 @@ import copy
 
 def insert_protein(pro_obj):
     ''' Insert_protein neemt een Proteine object als argument en maakt aan de
-        hand van de lengte van het proteine een grid. Vervolgens plaatst hij het
-        proteine ook in het grid.
+        hand van de lengte van het proteine een numpy grid. Vervolgens plaatst hij
+        het proteine ook in het grid.
         Returnt een ingevulde grid.
     '''
 

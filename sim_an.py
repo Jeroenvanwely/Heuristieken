@@ -20,10 +20,12 @@ def sim_anneal(protein):
     score = hill.hillclimber(protein)
     print(score)
     
+    highscore = copy.copy(score)
+    highproteinlist = copy.deepcopy(fold.Protein.protein_list)
 
     T0 = 1000
-    Tn = 1
-    N = 1000
+    Tn = 0
+    N = 10000
     # Tk = T0 - (0.9 * k)
 
     for i in range(len(fold.Protein.protein_list)):
@@ -32,7 +34,8 @@ def sim_anneal(protein):
             value = fold.Protein.protein_list[i].value
             fold.grid[row][column] = value + str(i)
 
-    for i in range(0, 1000):
+    for i in range(0, 10000):
+
         current_grid = copy.deepcopy(fold.grid)
         current_score = helpe.check_protein(fold.grid, fold.Protein)
         current_p_list = copy.deepcopy(fold.Protein.protein_list)
@@ -53,6 +56,8 @@ def sim_anneal(protein):
                 fold.grid[row][column] = value + str(k)
         
         if helpe.check_protein(fold.grid, fold.Protein) <= current_score:
+            highscore = copy.copy(helpe.check_protein(fold.grid, fold.Protein))
+            highproteinlist = 
             # print(i, "JOE",pp.check_protein(fold.grid, fold.Protein, fold.protein))
             continue
 
@@ -61,8 +66,8 @@ def sim_anneal(protein):
             score_calc = score_difference * 100
             temperature = T0 - (i*(T0 - Tn))/ N
             prob = math.exp(-score_calc / temperature)
-            print(score_difference,temperature, prob)
-            if round(prob*100) > random.randint(0,100):
+            # print(score_difference,temperature, prob)
+            if prob > random.random():
                 continue
             else:
                 fold.grid = current_grid 

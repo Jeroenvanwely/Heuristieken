@@ -15,8 +15,6 @@ class Fold:
                 
 
     def optionlist(self, row, col, x):
-        for i in range(len(self.Protein.protein_list)):
-            print("OPTIONIST", self.Protein.protein_list[i].row, self.Protein.protein_list[i].column)
         optionlist = []
         proteinlistco = []
 
@@ -33,9 +31,7 @@ class Fold:
                 if (row, col+j) not in proteinlistco:
                     optionlist.append(row)
                     optionlist.append(col+j)
-        for i in range(len(self.Protein.protein_list)):
-            print("OPTIONLIST end", self.Protein.protein_list[i].row, self.Protein.protein_list[i].column)
-
+       
             # print(optionlist, x)
                   
         # dat de oneven de rows zijn en blablablabla
@@ -63,17 +59,13 @@ class Fold:
         return optionlist
 
     def choose_option(self, optionlist, row, col):
-        for i in range(len(self.Protein.protein_list)):
-            print("CHOOSE OPTION", self.Protein.protein_list[i].row, self.Protein.protein_list[i].column)
         if optionlist != []:
             option = random.randint(0, (len(optionlist)-1))
             if option%2 != 0:
                 option -= 1
             return optionlist[option], optionlist[option + 1]
         else:
-            for i in range(len(self.Protein.protein_list)):
-                print("CHOOSE OPTION end", self.Protein.protein_list[i].row, self.Protein.protein_list[i].column)
-            return row, col
+           return row, col
 
     # Deze functie checkt gegeven een bepaalde plek waar we nu zijn, en een gegeven plek
     # waar die naartoe gevouwen wordt of het mogelijk is om het proteine hierheen te vouwen.
@@ -101,25 +93,16 @@ class Fold:
         return True
 
     def amino_check(self, future_row, future_col, x):
-        for i in range(len(self.Protein.protein_list)):
-            print("AMINO", self.Protein.protein_list[i].row, self.Protein.protein_list[i].column)
-        # print("x", self.Protein.protein_list[x].row, self.Protein.protein_list[x].column)
+       # print("x", self.Protein.protein_list[x].row, self.Protein.protein_list[x].column)
         for i in range(x):
             # print(self.Protein.protein_list[i].row, self.Protein.protein_list[i].column)
             if self.Protein.protein_list[i].row == future_row and self.Protein.protein_list[i].column == future_col:
                 # print("HOI")
-                for j in range(len(self.Protein.protein_list)):
-                    print("AMINO end", self.Protein.protein_list[j].row, self.Protein.protein_list[j].column)
                 return False
-        for i in range(len(self.Protein.protein_list)):
-            print("AMINO end", self.Protein.protein_list[i].row, self.Protein.protein_list[i].column)
         return True
             
 
     def fold(self, future_row, future_col, row, col, x):
-
-        for i in range(len(self.Protein.protein_list)):
-            print("FOLD", self.Protein.protein_list[i].row, self.Protein.protein_list[i].column)
 
 
         #HELP HIJ DOET SOMS DUS NOG DIE FOUT DAT HIJ (0,0) NIET IN DE LIJST HEEFT
@@ -153,13 +136,15 @@ class Fold:
         steps = newposindex - indexlist[0]
 
 
+        begin_conf = copy.deepcopy(self.Protein.protein_list)
+        begin_grid = copy.deepcopy(self.grid)
+
         self.Protein.protein_list[x].row = future_row
         self.Protein.protein_list[x].column = future_col
 
     
         switch = True
-        begin_conf = copy.deepcopy(self.Protein.protein_list)
-        begin_grid = copy.deepcopy(self.grid)
+    
         # print(self.grid)
 
         for i in range(1, len(indexlist)):
@@ -194,9 +179,6 @@ class Fold:
         #     print(self.Protein.protein_list[i].row, self.Protein.protein_list[i].column)
         # # print(self.grid)
 
-        for i in range(len(self.Protein.protein_list)):
-            print("FOLD end", self.Protein.protein_list[i].row, self.Protein.protein_list[i].column)
-         
 
     def getgetfold(self):
         muts = []
