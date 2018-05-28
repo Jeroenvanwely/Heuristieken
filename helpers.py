@@ -108,45 +108,35 @@ def check_protein(grid, pro_obj):
         col = pro_obj.protein_list[i].column
         if 'H' in grid[row][col]:
             num = str(i+1)
-            #kijk boven
-            if ('H' in grid[row-1][col] or 'C' in grid[row-1][col]) and num not in grid[row-1][col] and grid[row-1][col] not in checked:
-                score-=1
-            #kijk beneden
-            if ('H' in grid[row+1][col] or 'C' in grid[row+1][col]) and num not in grid[row+1][col] and grid[row+1][col] not in checked:
-                score-=1
-            # kijk links
-            if ('H' in grid[row][col-1] or 'C' in grid[row][col-1]) and num not in grid[row][col-1] and grid[row][col-1] not in checked:
-                score-=1
-            # kijk rechts
-            if ('H' in grid[row][col+1] or 'C' in grid[row][col+1]) and num not in grid[row][col+1] and grid[row][col+1] not in checked:
-                score-=1
-            checked.append(grid[row][col])
+            for j in [-1, 1]:
+                #kijk boven of beneden
 
+                # ALS GEKKE ERROR HEB HIWER ENTER GEDAAN IN IF STATEMENT
+                if (('H' in grid[row+j][col] or 'C' in grid[row+j][col]) 
+                    and num not in grid[row+j][col] and grid[row+j][col] not in checked):
+                    score-=1
+                # kijk links en rechts
+                if (('H' in grid[row][col+j] or 'C' in grid[row][col+j]) 
+                    and num not in grid[row][col+j] and grid[row][col+j] not in checked):
+                    score-=1
+                checked.append(grid[row][col])
+        
         if 'C' in grid[row][col]:
             num = str(i+1)
-            #kijk boven
-            if ('H' in grid[row-1][col] or 'C' in grid[row-1][col]) and num not in grid[row-1][col] and grid[row-1][col] not in checked:
-                if 'H' in grid[row-1][col]:    
-                    score-=1
-                if 'C' in grid[row-1][col]:
-                    score-=5
-            #kijk beneden
-            if ('H' in grid[row+1][col] or 'C' in grid[row-1][col]) and num not in grid[row+1][col] and grid[row+1][col] not in checked:
-                if 'H' in grid[row+1][col]:    
-                    score-=1
-                if 'C' in grid[row+1][col]:
-                    score-=5
-            # kijk links
-            if ('H' in grid[row][col-1] or 'C' in grid[row-1][col]) and num not in grid[row][col-1] and grid[row][col-1] not in checked:
-                if 'H' in grid[row][col-1]:    
-                    score-=1
-                if 'C' in grid[row][col-1]:
-                    score-=5
-            # kijk rechts
-            if ('H' in grid[row][col+1] or 'C' in grid[row-1][col]) and num not in grid[row][col+1] and grid[row][col+1] not in checked:
-                if 'H' in grid[row][col+1]:    
-                    score-=1
-                if 'C' in grid[row][col+1]:
-                    score-=5
-            checked.append(grid[row][col])
+            for j in [-1, 1]:
+                #kijk boven en beneden
+                if (('H' in grid[row+j][col] or 'C' in grid[row+j][col]) 
+                    and num not in grid[row+j][col] and grid[row+j][col] not in checked):
+                    if 'H' in grid[row+j][col]:    
+                        score-=1
+                    elif 'C' in grid[row+j][col]:
+                        score-=5
+                # kijk links
+                if (('H' in grid[row][col+j] or 'C' in grid[row+j][col]) 
+                    and num not in grid[row][col+j] and grid[row][col+j] not in checked):
+                    if 'H' in grid[row][col+j]:    
+                        score-=1
+                    elif 'C' in grid[row][col+j]:
+                        score-=5
+                checked.append(grid[row][col])
     return score
