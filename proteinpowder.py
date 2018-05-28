@@ -57,7 +57,6 @@ class Protein:
         protein_length = len(protein)
         for i in range (protein_length):
             self.insert(protein[i], protein_length)
-            print(self.protein_list[i].row, self.protein_list[i].column)
         return self
 
     # def build_protein(self, protein):
@@ -91,11 +90,14 @@ class Protein:
 
         positionlist = [(0,1), (-1,0), (0,-1), (1,0)]
         indexlist = []
-        for i in range(x, len(self.protein_list)):
-            row_t = self.protein_list[i].row - self.protein_list[i-1].row 
-            col_t = self.protein_list[i].column - self.protein_list[i-1].column
-            index = positionlist.index((row_t, col_t))
-            indexlist.append(index)
+        try:
+            for i in range(x, len(self.protein_list)):
+                row_t = self.protein_list[i].row - self.protein_list[i-1].row 
+                col_t = self.protein_list[i].column - self.protein_list[i-1].column
+                index = positionlist.index((row_t, col_t))
+                indexlist.append(index)
+        except ValueError:
+            return 5
         return indexlist
 
 

@@ -127,7 +127,8 @@ class Fold:
             return
 
         indexlist = self.Protein.position(x) #HIER? er wordt hier een x meegegeven die op dezelfde plek als het eerdere aminozuur staat
-
+        if indexlist == 5:
+            return
         newpos = (newposrow, newposcol)
         newposindex= positionlist.index(newpos)
 
