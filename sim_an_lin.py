@@ -46,7 +46,6 @@ def sim_anneal(protein):
             current_row = fold.Protein.protein_list[j-1].row
             current_col = fold.Protein.protein_list[j-1].column
             future_row, future_col = fold.choose_option(fold.optionlist(current_row, current_col, j), current_row, current_col)
-            # print(j)
             fold.fold(future_row, future_col, current_row, current_col, j)
             fold.grid = helpe.insert_protein(fold.Protein)
             for k in range(len(fold.Protein.protein_list)):

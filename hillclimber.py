@@ -33,7 +33,6 @@ def hillclimber(protein):
         current_row = fold.Protein.protein_list[j-1].row
         current_col = fold.Protein.protein_list[j-1].column
         future_row, future_col = fold.choose_option(fold.optionlist(current_row, current_col, j), current_row, current_col)
-        # print(current_row, current_col, future_row, future_col)
 
         # Vouw en zet in het grid
         fold.fold(future_row, future_col, current_row, current_col, j)
@@ -47,13 +46,6 @@ def hillclimber(protein):
             fold.Protein.protein_list = current_p_list           
         
     score = helpe.check_protein(fold.grid, fold.Protein)
-    # pp.print_graph2(fold.Protein.protein_list)
-
-
-    # rowlist = []
-    # for i in range(len(Protein.protein_list)):
-    #     rowlist.append()
-
     return score
 
 if __name__ == "__main__":
