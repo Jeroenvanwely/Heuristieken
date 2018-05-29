@@ -2,41 +2,59 @@ import helpers as hp
 import proteinpowder as pp
 
 def check_for_collision(row_list, column_list):
+    ''' Check_for_collision neemt twee lijsten met de row and column coördinaten 
+        van het proteïne als argument. Aan de hand van deze lijsten word er gekeken 
+        of er combinaties zijn van row's en columns die vaker voorkomen. Returned 
+        False als er collisions zijn en True als die er niet zijn.
+    '''
+
     for i in range(len(row_list)):
+        # Sla locatie van aminzouur i op
         row = row_list[i]
         column = column_list[i]
+        # Check of deze locatie ook tot een volgend aminozuur behoord
         for j in range(len(row_list) - 1 - i):
             if row == row_list[i+1+j] and column == column_list[i+1+j]:
                 return False
     return True
 
 def random_structure(pro_obj):
+    ''' Random_structure neemt een proteïne object als argument en plaatst in een 
+        random structuur. Elk aminozuur wordt onafhankelijk van alle andere 
+        aminozuren geplaats behalve zijn vooraande, omdat hij rondom deze geplaatst 
+        moet worden. Returnt een row_list en column_list, die de coördinaten van de 
+        aminzouren bevatten.
+    '''
+    
     option_list = []
     row_list = []
     column_list = []
 
     for i in range(len(pro_obj.protein_list)):
-        # eerste mag gelijk geplaatst worden   
-        if i == 0:
+        # PLaatsing van eerste twee aminozuren staat vast
+        if i == 0 or i == 1:
+            if i == 1:
+                pro_obj.protein_list[i].row = pro_obj.protein_list[0].row
+                pro_obj.protein_list[i].column = pro_obj.protein_list[0].column + 1
             row_list.append(pro_obj.protein_list[i].row)
             column_list.append(pro_obj.protein_list[i].column)
-        
+
         else:
-            # bepaal row en column van voorgaande aminozuur
+            # Bepaal row en column van voorgaand geplaatse aminozuur
             row = pro_obj.protein_list[i-1].row
             column = pro_obj.protein_list[i-1].column
             
-            # maak een lijst met alle mogelijkheiden rondom het voorgaande aminozuur
+            # Maakt lijst met alle plaatsingsmogelijkheden rondom het voorgaande aminozuur
             option_list.extend((row-1, column, row+1, column, row, column-1, row, column+1))
 
-            # kies random row en column uit die lijst
+            # Maak random keuze uit plaatsingsmogelijkheden
             option = hp.choose_random_option(option_list)
             
-            # plaats de gekozen row en column in de bijbehorden node in de p_list
+            # Plaats het aminozuur op deze locatie
             pro_obj.protein_list[i].row = option_list[option]
             pro_obj.protein_list[i].column = option_list[option+1]
             
-            # plaats nieuwe row en column in row_list en column_list
+            # Append deze locatie in de row_lsit en column_list
             row_list.append(option_list[option])
             column_list.append(option_list[option+1])
             
@@ -45,14 +63,21 @@ def random_structure(pro_obj):
     return row_list, column_list
 
 def random_structure_without_collision(protein):
+    ''' Random_structure_without_collision neemt een proteïne string als argument
+        en maakt van dit proteïne een random structuur zonder collisions. Returnt
+        een proteïne object
+    '''
+    
     pro_obj = pp.Protein(protein)
+    # Maak random structuur, zolang deze collisions heeft probeer opnieuw.
     row_list, column_list = random_structure(pro_obj)
     while check_for_collision(row_list, column_list) == False:
         row_list, column_list = random_structure(pro_obj)
-    return pro_obj    
+    
+    # return pro_obj    
 
-if __name__ == "__main__":
-    protein = "HHPHHHPHPHHHPH"  
-    pro_obj = random_structure_without_collision(protein)
-    print(hp.check_protein(hp.insert_protein(pro_obj), pro_obj))
-    hp.print_graph(pro_obj)
+# if __name__ == "__main__":
+#     protein = "HHPHHHPHPHHHPH"  
+#     pro_obj = random_structure_without_collision(protein)
+#     print(hp.check_protein(hp.insert_protein(pro_obj), pro_obj))
+#     hp.print_graph(pro_obj)
