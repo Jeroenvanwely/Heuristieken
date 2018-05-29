@@ -37,28 +37,12 @@ def sim_anneal(protein):
 
     for i in range(0, 1000):
 
-        current_grid = copy.deepcopy(fold.grid)
-        current_score = helpe.check_protein(fold.grid, fold.Protein)
-        current_p_list = copy.deepcopy(fold.Protein.protein_list)
-        j = random.randint(0, (len(fold.Protein.protein_list)-1))
-        if j <= 1:
-            continue
-        else: 
-            current_row = fold.Protein.protein_list[j-1].row
-            current_col = fold.Protein.protein_list[j-1].column
-            future_row, future_col = fold.choose_option(fold.optionlist(current_row, current_col, j), current_row, current_col)
-            fold.fold(future_row, future_col, current_row, current_col, j)
-            fold.grid = helpe.insert_protein(fold.Protein)
-            for k in range(len(fold.Protein.protein_list)):
-                column = fold.Protein.protein_list[k].column
-                row = fold.Protein.protein_list[k].row
-                value = fold.Protein.protein_list[k].value
-                fold.grid[row][column] = value + str(k)
+        current_grid, current_score, current_p_list = fold.random_fold()
         
         if helpe.check_protein(fold.grid, fold.Protein) <= current_score:
-            highscore = copy.copy(helpe.check_protein(fold.grid, fold.Protein))
-            highproteinlist = copy.deepcopy(fold.Protein.protein_list)
-            continue
+            if helpe.check_protein(fold.grid, fold.Protein) <= highscore:
+                highscore = copy.copy(helpe.check_protein(fold.grid, fold.Protein))
+                highproteinlist = copy.deepcopy(fold.Protein.protein_list)
 
         else:
             score_difference = helpe.check_protein(fold.grid, fold.Protein) - current_score

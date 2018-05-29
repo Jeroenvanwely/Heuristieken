@@ -3,6 +3,7 @@ import random
 import matplotlib.pylab as plt
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+import copy
 
 
 def insert_protein(pro_obj):
@@ -37,6 +38,7 @@ def choose_random_option(option_list):
     if option%2 != 0:
         option -= 1
     return option
+
 
 def graph_boundaries(pro_obj):
     ''' Graph_boundaries neemt een proteine object als argument en bepaald vervolgens
