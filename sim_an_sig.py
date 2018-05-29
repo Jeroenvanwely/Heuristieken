@@ -24,7 +24,8 @@ def sim_anneal(protein, switch):
     T0 = 1000
     Tn = 0
     N = 10000
-    # Tk = T0 - (0.9 * k)
+    A = ((T0 - Tn) * (N +1)) / N
+    B = T0 - A
 
     scoreslist = [score]
     proteinlistlist = []
@@ -67,7 +68,7 @@ def sim_anneal(protein, switch):
         else:
             score_difference = helpe.check_protein(fold.grid, fold.Protein) - current_score
             score_calc = score_difference * 100
-            temperature = T0 - (i*(T0 - Tn))/ N
+            temperature = (A / (i+1)) + B
             prob = math.exp(-score_calc / temperature)
             if prob > random.random():
                 continue
@@ -98,29 +99,3 @@ if __name__ == "__main__":
     # fold = ff.Fold(proteinlist[0])
     # score = sim_anneal(proteinlist[0])
     # print(score)
-
-    # COURSE
-    switch = 0
-    for i in range(len(proteinlist)):
-        for j in range(10):
-            scoreslist = sim_anneal(proteinlist[i], switch)
-            results = os.path.abspath('Results/simulated_anneal/linear/sim_course_lin' +str(i) + '.csv') 
-            with open(results, 'a') as data: #add data
-                for k in range(len(scoreslist)):
-                    if k % 2 == 0:
-                        data.write(str(scoreslist[k]) + '\n')
-                    else:
-                        for z in range(len(scoreslist[k])):
-                            data.write(str(scoreslist[k][z]) + ',')
-                        data.write('\n')    
-                data.write('\n' + "new iteration" + '\n')
-        
-    
-    # SCORE
-    switch = 1
-    for i in range(len(proteinlist)):
-        for j in range(100):
-            score = sim_anneal(proteinlist[i], switch)
-            results = os.path.abspath('Results/simulated_anneal/linear/sim_results_lin' +str(i) + '.csv') 
-            with open(results, 'a') as data: #add data
-                data.write(str(score) + '\n')

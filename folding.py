@@ -31,30 +31,6 @@ class Fold:
                 if (row, col+j) not in proteinlistco:
                     optionlist.append(row)
                     optionlist.append(col+j)
-       
-            # print(optionlist, x)
-                  
-        # dat de oneven de rows zijn en blablablabla
-        #kijk boven
-        # if '_' in self.grid[row-1][col]:
-        #     if self.fold_check(row, col, row-1, col, x):
-        #         optionlist.append(row-1) 
-        #         optionlist.append(col)
-        # #kijk beneden
-        # if '_' in self.grid[row+1][col]:
-        #     if self.fold_check(row, col, row+1, col, x):
-        #         optionlist.append(row+1) 
-        #         optionlist.append(col)
-        # # kijk links
-        # if '_' in self.grid[row][col-1]:
-        #     if self.fold_check(row, col, row, col-1, x):
-        #         optionlist.append(row) 
-        #         optionlist.append(col-1)
-        # # kijk rechts
-        # if '_' in self.grid[row][col+1]:
-        #     if self.fold_check(row, col, row, col+1, x):
-        #         optionlist.append(row) 
-        #         optionlist.append(col+1)
 
         return optionlist
 

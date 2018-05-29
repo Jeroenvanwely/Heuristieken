@@ -22,7 +22,7 @@ def hillclimber(protein):
     fold = ff.Fold(protein)
     helpe.insert_protein(fold.Protein)
 
-    for i in range(1000):
+    for i in range(10000):
         # Maak kopie van huidige staat voor latere vergelijkingen
         current_grid = copy.deepcopy(fold.grid)
         current_score = helpe.check_protein(fold.grid, fold.Protein)
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     # print(score)
 
     for i in range(len(proteinlist)):
-        for j in range(100):
+        for j in range(30):
             fold = ff.Fold(proteinlist[i])
             score = hillclimber(proteinlist[i])
 
