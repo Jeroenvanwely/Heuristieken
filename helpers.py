@@ -1,12 +1,9 @@
-import pandas as pd 
 import numpy as np
 import random
 import matplotlib.pylab as plt
 import matplotlib.pyplot as plt
-import seaborn as sns
 import matplotlib.patches as mpatches
-import proteinpowder as pp
-import copy
+
 
 def insert_protein(pro_obj):
     ''' Insert_protein neemt een Proteine object als argument en maakt aan de
@@ -35,6 +32,7 @@ def choose_random_option(option_list):
     ''' Choose_random_option neemt een lijst als argument en returnt vervolgens
         een random integer tussen 0 en de lengte van die gegeven lijst.
     '''
+
     option = random.randint(0, (len(option_list) - 1))
     if option%2 != 0:
         option -= 1
@@ -46,6 +44,7 @@ def graph_boundaries(pro_obj):
         Returnt de hoogste en laagste waarden van zowel de row en de column met een
         speling van 1 aan alle kanten
     '''
+
     lowest_row = 100
     highest_row = 0
     lowest_column = 100
@@ -68,6 +67,7 @@ def print_graph(pro_obj):
         hand van de locatie van de aminozuren een visualisatie. Het maakt gebruik van
         graph_boundaries om te bepalen waar de grenzen van de visualisatie liggen.
     '''
+
     plt.style.use('seaborn-whitegrid')
     max_row_list = []
     max_column_list = []
@@ -111,11 +111,7 @@ def print_graph(pro_obj):
     plt.show()
 
 def check_protein(grid, pro_obj):
-    ''' We houden de eerste node bij en checken dan alle vier de hokjes
-        om hem heen. Degene die de tweede node is pakken we en daarmee
-        gaan we vervolgens verder om te checken wat om hem heen staat.
-        Bij elke H die we gecheckt hebben voegen we deze toe aan een lijst
-        zodat dubbele tellingen voorkomen worden.
+    ''' 
     '''
 
     score = 0

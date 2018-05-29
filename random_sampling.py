@@ -49,10 +49,10 @@ def random_structure_without_collision(protein):
     row_list, column_list = random_structure(pro_obj)
     while check_for_collision(row_list, column_list) == False:
         row_list, column_list = random_structure(pro_obj)
-    # return pro_obj    
+    return pro_obj    
 
-# if __name__ == "__main__":
-#     protein = "HHPHHHPHPHHHPH"  
-#     pro_obj = random_structure_without_collision(protein)
-#     print(hp.check_protein(hp.insert_protein(pro_obj), pro_obj))
-#     hp.print_graph(pro_obj)
+if __name__ == "__main__":
+    protein = "HHPHHHPHPHHHPH"  
+    pro_obj = random_structure_without_collision(protein)
+    print(hp.check_protein(hp.insert_protein(pro_obj), pro_obj))
+    hp.print_graph(pro_obj)
