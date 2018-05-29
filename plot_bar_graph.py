@@ -1,28 +1,35 @@
-import matplotlib.pyplot as plt
+import csv
+from collections import Counter
+import matplotlib.pyplot as plt; plt.rcdefaults()
 import numpy as np
+import matplotlib.pyplot as plt
 
-# import data with loadtxt, but only the relevant floats. 
-# data.csv is the file as you have given it above
-data = np.loadtxt('Results/hillclimber/h_results0.csv', delimiter=',', skiprows = 1, usecols = range(1,5))
-data = data.transpose()
+with open('Results/hillclimber/h_results0.csv', 'r') as f:
+    values = []
+    freq = []
+    score = []
+    reader = csv.reader(f)
+    for row in reader:
+        values.append(row[0])
 
-# import the tick labels
-xt = np.loadtxt('Results/hillclimber/h.results0.csv', dtype='str', delimiter=',', skiprows = 1, usecols = (0,))
+    counts = Counter(values)
+    score = sorted(counts)
+    lowest_score = score[len(score)-1]
+    score = []
+    number = 1
+    for i in range(int(lowest_score[1]) + 3):
+        number = number - 1
+        score.append(number)
+    for key in score:
+        freq.append(counts[str(key)])
+    print(score)
+    print(freq)
 
-width = 0.45
-ind = np.arange(11) + 0.75
 
-fig, ax = plt.subplots(1,1)
-p0 = ax.bar(ind, data[0],  width, color = 'cyan')
-p1 = ax.bar(ind, data[1], width, bottom = data[0], color = 'violet')
-p2 = ax.bar(ind, data[2], width, bottom = data[0] + data[1], color = 'g')
-p3 = ax.bar(ind, data[3], width, bottom = data[0] + data[1] + data[2], color = 'r')
-
-ax.set_ylabel('kWh')
-ax.set_xlabel('month')
-ax.set_xticks (ind + width/2.)
-ax.set_xticklabels( xt, rotation = 70 )
-
-fig.legend( (p0[0], p1[0], p2[0], p3[0]), ('kitchen', 'laundry', 'aircon&heater', 'other') )
-fig.tight_layout()
-fig.show()
+y_pos = np.arange(len(score)) 
+plt.bar(y_pos, freq, align='center', alpha=0.75, color='r')
+plt.xticks(y_pos, score)
+plt.xlabel('Score')
+plt.ylabel('Frequentie')
+plt.title('Hillclimber')
+plt.show()
