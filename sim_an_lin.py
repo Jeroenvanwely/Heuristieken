@@ -100,26 +100,26 @@ if __name__ == "__main__":
     # print(score)
 
     # COURSE
-    switch = 0
-    for i in range(len(proteinlist)):
-        for j in range(10):
-            scoreslist = sim_anneal(proteinlist[i], switch)
-            results = os.path.abspath('Results/simulated_anneal/linear/sim_course_lin' +str(i) + '.csv') 
-            with open(results, 'a') as data: #add data
-                for k in range(len(scoreslist)):
-                    if k % 2 == 0:
-                        data.write(str(scoreslist[k]) + '\n')
-                    else:
-                        for z in range(len(scoreslist[k])):
-                            data.write(str(scoreslist[k][z]) + ',')
-                        data.write('\n')    
-                data.write('\n' + "new iteration" + '\n')
+    # switch = 0
+    # for i in range(len(proteinlist)):
+    #     for j in range(10):
+    #         scoreslist = sim_anneal(proteinlist[i], switch)
+    #         results = os.path.abspath('Results/simulated_anneal/linear/sim_course_lin' +str(i) + '.csv') 
+    #         with open(results, 'a') as data: #add data
+    #             for k in range(len(scoreslist)):
+    #                 if k % 2 == 0:
+    #                     data.write(str(scoreslist[k]) + '\n')
+    #                 else:
+    #                     for z in range(len(scoreslist[k])):
+    #                         data.write(str(scoreslist[k][z]) + ',')
+    #                     data.write('\n')    
+    #             data.write('\n' + "new iteration" + '\n')
         
     
     # SCORE
     switch = 1
-    for i in range(len(proteinlist)):
-        for j in range(100):
+    for i in range(2, len(proteinlist)):
+        for j in range(30):
             score = sim_anneal(proteinlist[i], switch)
             results = os.path.abspath('Results/simulated_anneal/linear/sim_results_lin' +str(i) + '.csv') 
             with open(results, 'a') as data: #add data
