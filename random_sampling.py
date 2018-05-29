@@ -1,6 +1,8 @@
 import helpers as hp
 import proteinpowder as pp
 
+import os
+
 def check_for_collision(row_list, column_list):
     ''' Check_for_collision neemt twee lijsten met de row and column coördinaten 
         van het proteïne als argument. Aan de hand van deze lijsten word er gekeken 
@@ -64,10 +66,15 @@ def random_structure_without_collision(protein):
     while check_for_collision(row_list, column_list) == False:
         row_list, column_list = random_structure(pro_obj)
     
-    # return pro_obj    
+    grid = hp.insert_protein(pro_obj)
+    score = hp.check_protein(grid, pro_obj)
+    return score  
 
-# if __name__ == "__main__":
-#     protein = "HHPHHHPHPHHHPH"  
-#     pro_obj = random_structure_without_collision(protein)
-#     print(hp.check_protein(hp.insert_protein(pro_obj), pro_obj))
-#     hp.print_graph(pro_obj)
+if __name__ == "__main__":
+    proteinlist = ["HHPHHHPHPHHHPH", "HPHPPHHPHPPHPHHPPHPH", "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP", "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH", "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP", "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC", "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH", "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"]
+    for i in range(len(proteinlist)):
+        for j in range(30):
+            score = random_structure_without_collision(proteinlist[i])
+            results = os.path.abspath('Results/random_sampling/rs_results' +str(i) + '.csv') 
+            with open(results, 'a') as data: #add data
+                data.write(str(score) + '\n')
