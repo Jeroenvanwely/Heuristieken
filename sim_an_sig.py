@@ -9,7 +9,7 @@ import helpers as helpe
 import hillclimber as hill
 import math
 
-def sim_anneal(protein, switch):
+def sim_anneal(protein):
     ''' Ti = T0 - i(T0-Tn) / N
         Kan ik i als temp gebruiken? denk dat dit handig is
         T0 is iets van count die hoog staat
@@ -17,6 +17,7 @@ def sim_anneal(protein, switch):
     '''
     fold = ff.Fold(protein)
     score = hill.hillclimber(protein)
+    print(score)
     
     highscore = copy.copy(score)
     highproteinlist = copy.deepcopy(fold.Protein.protein_list)
@@ -60,7 +61,7 @@ def sim_anneal(protein, switch):
                 value = fold.Protein.protein_list[k].value
                 fold.grid[row][column] = value + str(k)
         
-        if helpe.check_protein(fold.grid, fold.Protein) <= current_score:
+        if helpe.check_protein(fold.grid, fold.Protein) <= highscore:
             highscore = copy.copy(helpe.check_protein(fold.grid, fold.Protein))
             highproteinlist = copy.deepcopy(fold.Protein.protein_list)
             continue
@@ -70,6 +71,7 @@ def sim_anneal(protein, switch):
             score_calc = score_difference * 100
             temperature = (A / (i+1)) + B
             prob = math.exp(-score_calc / temperature)
+            print(score_difference, temperature, prob)
             if prob > random.random():
                 continue
             else:
@@ -78,24 +80,23 @@ def sim_anneal(protein, switch):
 
         score = helpe.check_protein(fold.grid, fold.Protein)
     
-        if switch == 0:
-            proteinlistlist = []
-            score = helpe.check_protein(fold.grid, fold.Protein)
-            scoreslist.append(score)
-            for k in range(len(fold.Protein.protein_list)):
-                proteinlistlist.append(fold.Protein.protein_list[k].row)
-                proteinlistlist.append(fold.Protein.protein_list[k].column)
-            scoreslist.append(proteinlistlist)
-    if switch == 0:
-        return scoreslist
-    elif switch == 1:
-        return highscore 
+        
+        proteinlistlist = []
+        score = helpe.check_protein(fold.grid, fold.Protein)
+        scoreslist.append(score)
+        for k in range(len(fold.Protein.protein_list)):
+            proteinlistlist.append(fold.Protein.protein_list[k].row)
+            proteinlistlist.append(fold.Protein.protein_list[k].column)
+        scoreslist.append(proteinlistlist)
+    # if switch == 0:
+    #     return scoreslist
+    # elif switch == 1:
+    return highscore 
     # score = helpe.check_protein(fold.grid, fold.Protein) 
     # return highscore #HIGHSCORE
 
 if __name__ == "__main__":
     proteinlist = ["HHPHHHPHPHHHPH", "HPHPPHHPHPPHPHHPPHPH", "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP", "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH", "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP", "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC", "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH", "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"]
     
-    # fold = ff.Fold(proteinlist[0])
-    # score = sim_anneal(proteinlist[0])
-    # print(score)
+    score = sim_anneal(proteinlist[0])
+    print(score)
