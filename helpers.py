@@ -31,14 +31,14 @@ def insert_protein(pro_obj):
 
 def choose_random_option(option_list):
     ''' Choose_random_option neemt een lijst als argument en returnt vervolgens
-        een random integer tussen 0 en de lengte van die gegeven lijst.
+        een random even integer tussen 0 en de lengte van die gegeven lijst.
     '''
 
     option = random.randint(0, (len(option_list) - 1))
+    # Als random int niet even is, int - 1
     if option%2 != 0:
         option -= 1
     return option
-
 
 def graph_boundaries(pro_obj):
     ''' Graph_boundaries neemt een proteine object als argument en bepaald vervolgens
@@ -47,11 +47,13 @@ def graph_boundaries(pro_obj):
         speling van 1 aan alle kanten
     '''
 
+    # laagste row en column beginnen hoor, omdat een minimum gevonden moet worden
     lowest_row = 100
     highest_row = 0
     lowest_column = 100
     highest_column = 0
     
+    # Vind laagste en hoogste row en column
     for i in range(len(pro_obj.protein_list)):
         if pro_obj.protein_list[i].row < lowest_row:
             lowest_row = pro_obj.protein_list[i].row
@@ -75,33 +77,24 @@ def print_graph(pro_obj):
     max_column_list = []
     value_list = []
 
+    # Opslaan van coördinaten en waardes van proteïne
     for i in range(len(pro_obj.protein_list)):
         max_row_list.append(pro_obj.protein_list[i].row)
         max_column_list.append(pro_obj.protein_list[i].column)
         value_list.append(pro_obj.protein_list[i].value)
 
+    # Laat de assen zo lopen dat alleen het gedeelte van de grafiek wordt weergegeven
     lowest_row, highest_row, lowest_column, highest_column = graph_boundaries(pro_obj)
     if highest_row - lowest_row >= highest_column - lowest_column:
         plt.axis([lowest_row, highest_row, lowest_column, lowest_column + highest_row - lowest_row]) 
     else:
         plt.axis([lowest_row, lowest_row + highest_column - lowest_column, lowest_column, highest_column])
 
-    colors = {
-        'H' : 'r', 
-        'P' : 'b',
-        'C' : 'purple',
-        }
-    
-    df = {
-        'x': max_row_list, 
-        'y': max_column_list, 
-        's': 300, 
-        'group': [colors[x] for x in value_list]
-        }
-
+    # Geef kleuren aan bepaalde waardes
+    colors = {'H' : 'r', 'P' : 'b','C' : 'purple',}
+    df = {'x': max_row_list, 'y': max_column_list, 's': 300, 'group': [colors[x] for x in value_list]}
     plt.plot(df['x'], df['y'], zorder=1)
     plt.scatter(df['x'], df['y'], df['s'], c=df['group'], zorder=2)
-    
     classes = ['H','P', 'C']
     class_colours = ['r','b','purple']
     recs = []

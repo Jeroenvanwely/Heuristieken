@@ -31,7 +31,7 @@ def random_structure(pro_obj):
     column_list = []
 
     for i in range(len(pro_obj.protein_list)):
-        # PLaatsing van eerste twee aminozuren staat vast
+        # Plaatsing van eerste twee aminozuren staat vast
         if i == 0 or i == 1:
             if i == 1:
                 pro_obj.protein_list[i].row = pro_obj.protein_list[0].row
@@ -40,25 +40,15 @@ def random_structure(pro_obj):
             column_list.append(pro_obj.protein_list[i].column)
 
         else:
-            # Bepaal row en column van voorgaand geplaatse aminozuur
+            # plaats aminozuur op random keuze uit plaatsingsmogelijkheden rondom het voorgaande aminozuur
             row = pro_obj.protein_list[i-1].row
             column = pro_obj.protein_list[i-1].column
-            
-            # Maakt lijst met alle plaatsingsmogelijkheden rondom het voorgaande aminozuur
             option_list.extend((row-1, column, row+1, column, row, column-1, row, column+1))
-
-            # Maak random keuze uit plaatsingsmogelijkheden
             option = hp.choose_random_option(option_list)
-            
-            # Plaats het aminozuur op deze locatie
             pro_obj.protein_list[i].row = option_list[option]
             pro_obj.protein_list[i].column = option_list[option+1]
-            
-            # Append deze locatie in de row_lsit en column_list
             row_list.append(option_list[option])
             column_list.append(option_list[option+1])
-            
-            # leeg de option_list
             option_list = []
     return row_list, column_list
 
