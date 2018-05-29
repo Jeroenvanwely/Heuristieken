@@ -118,7 +118,7 @@ if __name__ == "__main__":
     
     # SCORE
     switch = 1
-    for i in range(2, len(proteinlist)):
+    for i in range(4, len(proteinlist)):
         for j in range(30):
             score = sim_anneal(proteinlist[i], switch)
             results = os.path.abspath('Results/simulated_anneal/linear/sim_results_lin' +str(i) + '.csv') 
