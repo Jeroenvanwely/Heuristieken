@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import random
 import proteinpowder as pp
-import random
 import copy
 import folding as ff
 import os
@@ -23,14 +22,23 @@ def hillclimber(protein):
     fold = ff.Fold(protein)
     helpe.insert_protein(fold.Protein)
 
+    scoreslist = []
     for i in range(10000):
         current_grid, current_score, current_p_list = fold.random_fold()
         if helpe.check_protein(fold.grid, fold.Protein) <= current_score:
             continue
         else:
             fold.grid = current_grid 
-            fold.Protein.protein_list = current_p_list         
-    return helpe.check_protein(fold.grid, fold.Protein)
+            fold.Protein.protein_list = current_p_list 
+        proteinlistlist = []
+        score = helpe.check_protein(fold.grid, fold.Protein)
+        scoreslist.append(score)
+        for k in range(len(fold.Protein.protein_list)):
+            proteinlistlist.append(fold.Protein.protein_list[k].row)
+            proteinlistlist.append(fold.Protein.protein_list[k].column)
+        scoreslist.append(proteinlistlist)        
+    # return helpe.check_protein(fold.grid, fold.Protein)
+    return scoreslist
 
 if __name__ == "__main__":
     proteinlist = ["HHPHHHPHPHHHPH", "HPHPPHHPHPPHPHHPPHPH", "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP", "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH", "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP", "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC", "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH", "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"]
@@ -49,12 +57,18 @@ if __name__ == "__main__":
     # score = hillclimber(proteinlist[1])
     # print(score)
 
-    for i in range(10):
-        fold = ff.Fold(proteinlist[i])
-        score = hillclimber(proteinlist[i])
-
-        results = os.path.abspath('Results/hillclimber/time' +str(i) + '.csv') 
-        with open(results, 'a') as data: #add data
-            data.write(str(score) + '\n')
+    for i in range(len(proteinlist)):
+        for j in range(1):
+            scoreslist = hillclimber(proteinlist[i])
+            results = os.path.abspath('Results/hillclimber/hill_course' +str(i) + '.csv') 
+            with open(results, 'a') as data: #add data
+                for k in range(len(scoreslist)):
+                    if k % 2 == 0:
+                        data.write(str(scoreslist[k]) + '\n')
+                    else:
+                        for z in range(len(scoreslist[k])):
+                            data.write(str(scoreslist[k][z]) + ',')
+                        data.write('\n')    
+                data.write('\n' + "new iteration" + '\n')
 
 
