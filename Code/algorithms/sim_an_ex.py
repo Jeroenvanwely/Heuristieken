@@ -53,23 +53,4 @@ def sim_anneal(protein, cool):
             elif cool == int(3):
                 temperature = (A / (i+1)) + B
             helpe.probability(temperature, fold, current_score, current_grid, current_p_list)
-    
     return highscore 
-
-if __name__ == "__main__":
-    proteinlist = ["HHPHHHPHPHHHPH", "HPHPPHHPHPPHPHHPPHPH", "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP", "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH", "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP", "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC", "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH", "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"]
-  
-    # COURS
-    for i in range(len(proteinlist)):
-        for j in range(10):
-            scoreslist = sim_anneal(proteinlist[i], int(2))
-            results = os.path.abspath('Results/simulated_anneal/exponential/sim_course_ex' +str(i) + '.csv') 
-            with open(results, 'a') as data: #add data
-                for k in range(len(scoreslist)):
-                    if k % 2 == 0:
-                        data.write(str(scoreslist[k]) + '\n')
-                    else:
-                        for z in range(len(scoreslist[k])):
-                            data.write(str(scoreslist[k][z]) + ',')
-                        data.write('\n')    
-                data.write('\n' + "new iteration" + '\n')
