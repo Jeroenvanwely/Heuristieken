@@ -1,6 +1,7 @@
 import helpers as hp
 import proteinpowder as pp
 import os
+import timeit
 
 def check_for_collision(row_list, column_list):
     ''' Check_for_collision neemt twee lijsten met de row and column coördinaten 
@@ -72,9 +73,15 @@ def random_structure_without_collision(protein):
 if __name__ == "__main__":
     proteinlist = ["HHPHHHPHPHHHPH", "HPHPPHHPHPPHPHHPPHPH", "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP", "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH", "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP", "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC", "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH", "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"]
     #proteinlist = ["PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP", "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC"]
-    for i in range(2):
-        for j in range(30):
-            score = random_structure_without_collision(proteinlist[i])
-            results = os.path.abspath('Results/random_sampling/rs_results' +str(i+4) + '.csv') 
-            with open(results, 'a') as data: #add data
-                data.write(str(score) + '\n')
+    for i in range(len(proteinlist)):
+
+
+        start = timeit.default_timer()
+
+        score = random_structure_without_collision(proteinlist[i])
+
+        stop = timeit.default_timer()
+        print(score)
+        print(stop - start) 
+
+

@@ -2,8 +2,7 @@ import csv
 from collections import Counter
 import matplotlib.pyplot as plt; plt.rcdefaults()
 import numpy as np
-
-with open('Results/hillclimber/h_results7.csv', 'r') as f:
+with open('Results/simulated_anneal/logarithmic/sim_results_log7.csv', 'r') as f:
     values = []
     freq = []
     score = []
@@ -19,9 +18,10 @@ with open('Results/hillclimber/h_results7.csv', 'r') as f:
 
     highest_score = score[0]
     lowest_score = score[len(score) - 1]
-    x = -lowest_score + highest_score + 1
-    number = highest_score + 1
+    x = -lowest_score + 1
+    number = 1
     score = []
+    
     for i in range(x):
         number = number - 1
         score.append(number)
@@ -31,8 +31,8 @@ with open('Results/hillclimber/h_results7.csv', 'r') as f:
 
     y_pos = np.arange(len(score)) 
     plt.bar(y_pos, freq, align='center', alpha=0.75, color='r')
-    plt.xticks(y_pos, score)
+    plt.xticks(y_pos, score, fontsize=7.5)
     plt.xlabel('Score')
     plt.ylabel('Frequentie')
-    plt.title('Hillclimber')
+    plt.title('Logarithmic simulated annealing: Proteïne 8')
     plt.show()
