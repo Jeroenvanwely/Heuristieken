@@ -127,18 +127,18 @@ class Fold:
             en een proteinlist met Aminode objecten in een lijst.
         '''
 
-        # Maak kopie van huidige staat voor latere vergelijkingen
+        # Maak kopie van huidige staat voor latere vergelijkingen.
         current_grid = copy.deepcopy(self.grid)
         current_score = helpe.check_protein(self.grid, self.Protein)
         current_p_list = copy.deepcopy(self.Protein.protein_list)
         
-        # Kies een random plek om te vouwen en kies een random optie om naar te vouwen
+        # Kies een random plek om te vouwen en kies een random optie om naar te vouwen.
         j = random.randint(2, (len(self.Protein.protein_list)-1))
         current_row = self.Protein.protein_list[j-1].row
         current_col = self.Protein.protein_list[j-1].column
         future_row, future_col = self.choose_option(self.optionlist(current_row, current_col, j), current_row, current_col)
 
-        # Vouw en zet in het grid
+        # Vouw en zet in het grid.
         self.fold(future_row, future_col, current_row, current_col, j)
         self.grid = helpe.insert_protein(self.Protein)
 

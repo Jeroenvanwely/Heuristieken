@@ -39,37 +39,29 @@ def sim_anneal(protein):
         else:
             temperature = T0 - (i*(T0 - Tn))/ N
             helpe.probability(temperature, fold, current_score, current_grid, current_p_list)
-    return highscore 
+    # return highscore
+        proteinlistlist = []
+        score = helpe.check_protein(fold.grid, fold.Protein)
+        scoreslist.append(score)
+        for k in range(len(fold.Protein.protein_list)):
+            proteinlistlist.append(fold.Protein.protein_list[k].row)
+            proteinlistlist.append(fold.Protein.protein_list[k].column)
+        scoreslist.append(proteinlistlist) 
+    return scoreslist
 
 if __name__ == "__main__":
     proteinlist = ["HHPHHHPHPHHHPH", "HPHPPHHPHPPHPHHPPHPH", "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP", "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH", "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP", "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC", "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH", "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"]
     
-    # fold = ff.Fold(proteinlist[0])
-    # score = sim_anneal(proteinlist[0])
-    # print(score)
-
-    # COURSE
-    # switch = 0
-    # for i in range(len(proteinlist)):
-    #     for j in range(10):
-    #         scoreslist = sim_anneal(proteinlist[i], switch)
-    #         results = os.path.abspath('Results/simulated_anneal/linear/sim_course_lin' +str(i) + '.csv') 
-    #         with open(results, 'a') as data: #add data
-    #             for k in range(len(scoreslist)):
-    #                 if k % 2 == 0:
-    #                     data.write(str(scoreslist[k]) + '\n')
-    #                 else:
-    #                     for z in range(len(scoreslist[k])):
-    #                         data.write(str(scoreslist[k][z]) + ',')
-    #                     data.write('\n')    
-    #             data.write('\n' + "new iteration" + '\n')
-        
-    
-    # SCORE
-    switch = 1
-    for i in range(0, len(proteinlist)):
-        for j in range(30):
-            score = sim_anneal(proteinlist[i], switch)
-            results = os.path.abspath('Results/simulated_anneal/linear/sim_results_lin' +str(i) + '.csv') 
+    for i in range(len(proteinlist)):
+        for j in range(10):
+            scoreslist = sim_anneal(proteinlist[i])
+            results = os.path.abspath('Results/simulated_anneal/linear/sim_course_lin' +str(i) + '.csv') 
             with open(results, 'a') as data: #add data
-                data.write(str(score) + '\n')
+                for k in range(len(scoreslist)):
+                    if k % 2 == 0:
+                        data.write(str(scoreslist[k]) + '\n')
+                    else:
+                        for z in range(len(scoreslist[k])):
+                            data.write(str(scoreslist[k][z]) + ',')
+                        data.write('\n')    
+                data.write('\n' + "new iteration" + '\n')

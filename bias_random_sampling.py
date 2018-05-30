@@ -3,6 +3,10 @@ import proteinpowder as pp
 import os
 
 def make_option_list(row, column, pro_obj):
+    ''' make_option_list neemt een row, column en proteïne object als argument
+        en maakt een lijst met vrijd plaatsingsmogelijkheden rondom het coördinaat
+        op de row en column. Retrunt een lijst met plaatsingsmogelijkheden.
+    '''
     potential_option_list = []  
     option_list = []  
     potential_option_list.extend((row-1, column, row+1, column, row, column-1, row, column+1))
@@ -11,6 +15,7 @@ def make_option_list(row, column, pro_obj):
         for k in range(len(pro_obj.protein_list)):
             if potential_option_list[j] == pro_obj.protein_list[k].row and potential_option_list[j+1] == pro_obj.protein_list[k].column:
                 switch = False
+        # Als locatie vrij. append in list
         if switch == True:
             option_list.append(potential_option_list[j])
             option_list.append(potential_option_list[j+1])
@@ -45,15 +50,3 @@ def bias_random_structure(proteinlist):
     grid = hp.insert_protein(pro_obj)
     score = hp.check_protein(grid, pro_obj)
     return score
-
-
-if __name__ == "__main__":
-    proteinlist = ["HHPHHHPHPHHHPH", "HPHPPHHPHPPHPHHPPHPH", "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP", "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH", "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP", "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC", "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH", "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"]
-    for i in range(len(proteinlist)):
-        for j in range(30):
-            score = bias_random_structure(proteinlist[i])
-            while score == False:
-                score = bias_random_structure(proteinlist[i])
-            # results = os.path.abspath('Results/bias_random_sampling/brs_results' +str(i) + '.csv') 
-            # with open(results, 'a') as data: #add data
-            #     data.write(str(score) + '\n')

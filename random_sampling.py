@@ -11,9 +11,11 @@ def check_for_collision(row_list, column_list):
     '''
 
     for i in range(len(row_list)):
+        
         # Sla locatie van aminzouur i op
         row = row_list[i]
         column = column_list[i]
+        
         # Check of deze locatie ook tot een volgend aminozuur behoord
         for j in range(len(row_list) - 1 - i):
             if row == row_list[i+1+j] and column == column_list[i+1+j]:
@@ -32,8 +34,8 @@ def random_structure(pro_obj):
     row_list = []
     column_list = []
 
+    # Plaatsing van eerste twee aminozuren staat vast
     for i in range(len(pro_obj.protein_list)):
-        # Plaatsing van eerste twee aminozuren staat vast
         if i == 0 or i == 1:
             if i == 1:
                 pro_obj.protein_list[i].row = pro_obj.protein_list[0].row
@@ -41,8 +43,8 @@ def random_structure(pro_obj):
             row_list.append(pro_obj.protein_list[i].row)
             column_list.append(pro_obj.protein_list[i].column)
 
+        # plaats aminozuur op random keuze uit plaatsingsmogelijkheden rondom het voorgaande aminozuur
         else:
-            # plaats aminozuur op random keuze uit plaatsingsmogelijkheden rondom het voorgaande aminozuur
             row = pro_obj.protein_list[i-1].row
             column = pro_obj.protein_list[i-1].column
             option_list.extend((row-1, column, row+1, column, row, column-1, row, column+1))
@@ -60,28 +62,11 @@ def random_structure_without_collision(protein):
         een proteïne object
     '''
     
-    pro_obj = pp.Protein(protein)
     # Maak random structuur, zolang deze collisions heeft probeer opnieuw.
+    pro_obj = pp.Protein(protein)
     row_list, column_list = random_structure(pro_obj)
     while check_for_collision(row_list, column_list) == False:
         row_list, column_list = random_structure(pro_obj)
-    
     grid = hp.insert_protein(pro_obj)
     score = hp.check_protein(grid, pro_obj)
     return score  
-
-if __name__ == "__main__":
-    proteinlist = ["HHPHHHPHPHHHPH", "HPHPPHHPHPPHPHHPPHPH", "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP", "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH", "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP", "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC", "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH", "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"]
-    #proteinlist = ["PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP", "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC"]
-    for i in range(len(proteinlist)):
-
-
-        start = timeit.default_timer()
-
-        score = random_structure_without_collision(proteinlist[i])
-
-        stop = timeit.default_timer()
-        print(score)
-        print(stop - start) 
-
-

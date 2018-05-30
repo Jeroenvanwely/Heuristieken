@@ -26,11 +26,13 @@ def sim_anneal(protein, cool):
         T0 = 1000
         Tn = 0
         N = 10000
+
     # Exponential
     elif cool == int(2):
         T0 = 10000
         Tn = 1000
         N = 1000
+        
     # Logarithmic
     elif cool == int(3):
         T0 = 1000

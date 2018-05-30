@@ -14,7 +14,7 @@ def insert_protein(pro_obj):
         Returnt een ingevulde grid.
     '''
 
-    # Het maken van het grid
+    # Het maken van het grid.
     if len(pro_obj.protein_list) % 2 == 0:
         grid_length = 2*len(pro_obj.protein_list)
     else:
@@ -22,7 +22,7 @@ def insert_protein(pro_obj):
     grid = np.chararray((grid_length, grid_length), itemsize = 3, unicode=True)
     grid[:] = '_'
     
-    # Het plaatsen van het proteine in de grid
+    # Het plaatsen van het proteine in de grid.
     for i in range(len(pro_obj.protein_list)):
         column = pro_obj.protein_list[i].column
         row = pro_obj.protein_list[i].row
@@ -36,7 +36,7 @@ def choose_random_option(option_list):
     '''
 
     option = random.randint(0, (len(option_list) - 1))
-    # Als random int niet even is, int - 1
+    # Als random int niet even is, int - 1.
     if option%2 != 0:
         option -= 1
     return option
@@ -48,13 +48,13 @@ def graph_boundaries(pro_obj):
         speling van 1 aan alle kanten
     '''
 
-    # laagste row en column beginnen hoor, omdat een minimum gevonden moet worden
+    # Laagste row en column beginnen hoor, omdat een minimum gevonden moet worden.
     lowest_row = 100
     highest_row = 0
     lowest_column = 100
     highest_column = 0
     
-    # Vind laagste en hoogste row en column
+    # Vind laagste en hoogste row en column.
     for i in range(len(pro_obj.protein_list)):
         if pro_obj.protein_list[i].row < lowest_row:
             lowest_row = pro_obj.protein_list[i].row
@@ -78,20 +78,20 @@ def print_graph(pro_obj):
     max_column_list = []
     value_list = []
 
-    # Opslaan van coördinaten en waardes van proteïne
+    # Opslaan van coördinaten en waardes van proteïne.
     for i in range(len(pro_obj.protein_list)):
         max_row_list.append(pro_obj.protein_list[i].row)
         max_column_list.append(pro_obj.protein_list[i].column)
         value_list.append(pro_obj.protein_list[i].value)
 
-    # Laat de assen zo lopen dat alleen het gedeelte van de grafiek wordt weergegeven
+    # Laat de assen zo lopen dat alleen het gedeelte van de grafiek wordt weergegeven.
     lowest_row, highest_row, lowest_column, highest_column = graph_boundaries(pro_obj)
     if highest_row - lowest_row >= highest_column - lowest_column:
         plt.axis([lowest_row, highest_row, lowest_column, lowest_column + highest_row - lowest_row]) 
     else:
         plt.axis([lowest_row, lowest_row + highest_column - lowest_column, lowest_column, highest_column])
 
-    # Geef kleuren aan bepaalde waardes
+    # Geef kleuren aan bepaalde waardes.
     colors = {'H' : 'r', 'P' : 'b','C' : 'purple',}
     df = {'x': max_row_list, 'y': max_column_list, 's': 300, 'group': [colors[x] for x in value_list]}
     plt.plot(df['x'], df['y'], zorder=1)
@@ -118,11 +118,13 @@ def check_protein(grid, pro_obj):
         if 'H' in grid[row][col]:
             num = str(i+1)
             for j in [-1, 1]:
-                #kijk boven of beneden of er CH of HH verbinding is, wijzig score.
+                
+                # kijk boven of beneden of er CH of HH verbinding is, wijzig score.
                 if (('H' in grid[row+j][col] or 'C' in grid[row+j][col]) 
                     and num not in grid[row+j][col] and grid[row+j][col] not in checked):
                     score-=1
-                # kijk links en rechts
+                
+                # kijk links en rechts.
                 if (('H' in grid[row][col+j] or 'C' in grid[row][col+j]) 
                     and num not in grid[row][col+j] and grid[row][col+j] not in checked):
                     score-=1
@@ -131,14 +133,16 @@ def check_protein(grid, pro_obj):
         if 'C' in grid[row][col]:
             num = str(i+1)
             for j in [-1, 1]:
-                #kijk boven en beneden of er CH of CC verbinding is, wijzig score.
+                
+                # kijk boven en beneden of er CH of CC verbinding is, wijzig score.
                 if (('H' in grid[row+j][col] or 'C' in grid[row+j][col]) 
                     and num not in grid[row+j][col] and grid[row+j][col] not in checked):
                     if 'H' in grid[row+j][col]:    
                         score-=1
                     elif 'C' in grid[row+j][col]:
                         score-=5
-                # kijk links en rechts
+                
+                # kijk links en rechts.
                 if (('H' in grid[row][col+j] or 'C' in grid[row+j][col]) 
                     and num not in grid[row][col+j] and grid[row][col+j] not in checked):
                     if 'H' in grid[row][col+j]:    
