@@ -1,6 +1,5 @@
 import helpers as hp
 import proteinpowder as pp
-
 import os
 
 def check_for_collision(row_list, column_list):
@@ -72,9 +71,10 @@ def random_structure_without_collision(protein):
 
 if __name__ == "__main__":
     proteinlist = ["HHPHHHPHPHHHPH", "HPHPPHHPHPPHPHHPPHPH", "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP", "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH", "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP", "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC", "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH", "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"]
-    for i in range(len(proteinlist)):
+    #proteinlist = ["PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP", "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC"]
+    for i in range(2):
         for j in range(30):
             score = random_structure_without_collision(proteinlist[i])
-            results = os.path.abspath('Results/random_sampling/rs_results' +str(i) + '.csv') 
+            results = os.path.abspath('Results/random_sampling/rs_results' +str(i+4) + '.csv') 
             with open(results, 'a') as data: #add data
                 data.write(str(score) + '\n')
