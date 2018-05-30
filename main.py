@@ -27,11 +27,13 @@ if heuristicsnumber == 0:
 elif heuristicsnumber == 1:
     print("The stabilityscore is ", hill.hillclimber(proteinlist[proteinnumber]))
 elif heuristicsnumber == 2:
-    print("The stabilityscore is ", lin.sim_anneal(proteinlist[proteinnumber]))
+    print("The stabilityscore is ", ex.sim_anneal(proteinlist[proteinnumber], int(1)))
 elif heuristicsnumber == 3:
-    print("The stabilityscore is ", ex.sim_anneal(proteinlist[proteinnumber]))
+    cool = str(ex)
+    print("The stabilityscore is ", ex.sim_anneal(proteinlist[proteinnumber], int(2)))
 elif heuristicsnumber == 4:
-    print("The stabilityscore is ", log.sim_anneal(proteinlist[proteinnumber]))
+    cool = str(log)
+    print("The stabilityscore is ", ex.sim_anneal(proteinlist[proteinnumber], int(3)))
 
 
 
