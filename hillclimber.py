@@ -7,8 +7,9 @@ import copy
 import folding as ff
 import os
 import helpers as helpe
+import timeit
 
-def hillclimber(protein): 
+def hillclimber(protein):
     ''' Dit algoritme probeert de beste score van een gegeven proteine te vinden. 
         Door eerst een kopie te maken van de huidige staat, dan een mutatie uit te
         voeren en vervolgens de twee met elkaar te vergelijken. De hoogste score 
@@ -22,33 +23,14 @@ def hillclimber(protein):
     fold = ff.Fold(protein)
     helpe.insert_protein(fold.Protein)
 
-    for i in range(10000): #RESULTS MET 10000
-
+    for i in range(10000):
         current_grid, current_score, current_p_list = fold.random_fold()
-        # # Maak kopie van huidige staat voor latere vergelijkingen
-        # current_grid = copy.deepcopy(fold.grid)
-        # current_score = helpe.check_protein(fold.grid, fold.Protein)
-        # current_p_list = copy.deepcopy(fold.Protein.protein_list)
-        
-        # # Kies een random plek om te vouwen en kies een random optie om naar te vouwen
-        # j = random.randint(2, (len(fold.Protein.protein_list)-1))
-        # current_row = fold.Protein.protein_list[j-1].row
-        # current_col = fold.Protein.protein_list[j-1].column
-        # future_row, future_col = fold.choose_option(fold.optionlist(current_row, current_col, j), current_row, current_col)
-
-        # # Vouw en zet in het grid
-        # fold.fold(future_row, future_col, current_row, current_col, j)
-        # fold.grid = helpe.insert_protein(fold.Protein)
-        
-        # Is de score beter? Ga door. Anders ga terug naar oude staat
         if helpe.check_protein(fold.grid, fold.Protein) <= current_score:
             continue
         else:
             fold.grid = current_grid 
-            fold.Protein.protein_list = current_p_list           
-        
-    score = helpe.check_protein(fold.grid, fold.Protein)
-    return score 
+            fold.Protein.protein_list = current_p_list         
+    return helpe.check_protein(fold.grid, fold.Protein)
 
 if __name__ == "__main__":
     proteinlist = ["HHPHHHPHPHHHPH", "HPHPPHHPHPPHPHHPPHPH", "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP", "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH", "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP", "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC", "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH", "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"]
@@ -64,16 +46,15 @@ if __name__ == "__main__":
     # print(protein.protein_list[3].row)
 
     # fold = ff.Fold(proteinlist[1])
-    score = hillclimber(proteinlist[1])
-    print(score)
+    # score = hillclimber(proteinlist[1])
+    # print(score)
 
-    # for i in range(len(proteinlist)):
-    #     for j in range(30):
-    #         fold = ff.Fold(proteinlist[i])
-    #         score = hillclimber(proteinlist[i])
+    for i in range(10):
+        fold = ff.Fold(proteinlist[i])
+        score = hillclimber(proteinlist[i])
 
-    #         results = os.path.abspath('Results/hillclimber/h_results' +str(i) + '.csv') 
-    #         with open(results, 'a') as data: #add data
-    #             data.write(str(score) + '\n')
+        results = os.path.abspath('Results/hillclimber/time' +str(i) + '.csv') 
+        with open(results, 'a') as data: #add data
+            data.write(str(score) + '\n')
 
 
