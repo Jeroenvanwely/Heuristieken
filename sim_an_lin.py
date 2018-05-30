@@ -60,9 +60,9 @@ def sim_anneal(protein, switch):
                 fold.grid[row][column] = value + str(k)
         
         if helpe.check_protein(fold.grid, fold.Protein) <= current_score:
-            highscore = copy.copy(helpe.check_protein(fold.grid, fold.Protein))
-            highproteinlist = copy.deepcopy(fold.Protein.protein_list)
-            continue
+            if helpe.check_protein(fold.grid, fold.Protein) <= highscore:
+                highscore = copy.copy(helpe.check_protein(fold.grid, fold.Protein))
+                highproteinlist = copy.deepcopy(fold.Protein.protein_list)
 
         else:
             score_difference = helpe.check_protein(fold.grid, fold.Protein) - current_score
@@ -77,14 +77,14 @@ def sim_anneal(protein, switch):
 
         score = helpe.check_protein(fold.grid, fold.Protein)
     
-        if switch == 0:
-            proteinlistlist = []
-            score = helpe.check_protein(fold.grid, fold.Protein)
-            scoreslist.append(score)
-            for k in range(len(fold.Protein.protein_list)):
-                proteinlistlist.append(fold.Protein.protein_list[k].row)
-                proteinlistlist.append(fold.Protein.protein_list[k].column)
-            scoreslist.append(proteinlistlist)
+        # if switch == 0:
+        #     proteinlistlist = []
+        #     score = helpe.check_protein(fold.grid, fold.Protein)
+        #     scoreslist.append(score)
+        #     for k in range(len(fold.Protein.protein_list)):
+        #         proteinlistlist.append(fold.Protein.protein_list[k].row)
+        #         proteinlistlist.append(fold.Protein.protein_list[k].column)
+        #     scoreslist.append(proteinlistlist)
     if switch == 0:
         return scoreslist
     elif switch == 1:
@@ -118,7 +118,7 @@ if __name__ == "__main__":
     
     # SCORE
     switch = 1
-    for i in range(4, len(proteinlist)):
+    for i in range(0, len(proteinlist)):
         for j in range(30):
             score = sim_anneal(proteinlist[i], switch)
             results = os.path.abspath('Results/simulated_anneal/linear/sim_results_lin' +str(i) + '.csv') 

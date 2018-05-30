@@ -5,8 +5,8 @@ Eiwitten zijn de bouwstenen van het leven. Ze zorgen dat alle processen in het m
 ![alt text](http://heuristieken.nl/wiki/images/3/3a/GoodBadFoldings.jpg)
 Bron: Daan van den Berg, http://heuristieken.nl/wiki/images/3/3a/GoodBadFoldings.jpg
 
-Dit vouwen van eiwitten tot een zo stabiel mogelijke vouwing kan gezien worden als een constrained optimization problem. Door het schrijven van de juiste algoritmes kan er ontdekt worden wat de laagste score (de stabielste vorm) van een specifiek eiwit is. In dit onderzoek zijn er verschillende algoritmes gebruikt om dit probleem te proberen oplossen.
-
+Dit vouwen van eiwitten tot een zo stabiel mogelijke vouwing kan gezien worden als een constrained optimization problem. Door het schrijven van de juiste algoritmes kan er ontdekt worden wat de laagste score (de stabielste vorm) van een specifiek eiwit is. In dit onderzoek zijn er verschillende algoritmes gebruikt om dit probleem te proberen oplossen. Hiermee gaan we op zoek naar het 'beste' algoritme voor dit probleem. 
+Onder de map Code is de code te vinden die hiervoor geschreven is. In de map Data is de data die gebruikt is voor dit probleem. To watch this problem 'unfold' gaat u naar het mapje met Results, waar de resultaten zowel in csv bestandjes als in visualisaties te zien zijn.
 
 ## Vereisten
 

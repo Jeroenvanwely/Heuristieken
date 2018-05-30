@@ -22,7 +22,7 @@ def hillclimber(protein):
     fold = ff.Fold(protein)
     helpe.insert_protein(fold.Protein)
 
-    for i in range(1000): #RESULTS MET 10000
+    for i in range(10000): #RESULTS MET 10000
 
         current_grid, current_score, current_p_list = fold.random_fold()
         # # Maak kopie van huidige staat voor latere vergelijkingen
