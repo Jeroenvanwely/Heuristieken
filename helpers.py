@@ -4,6 +4,7 @@ import matplotlib.pylab as plt
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import copy
+import math
 
 
 def insert_protein(pro_obj):
@@ -146,3 +147,21 @@ def check_protein(grid, pro_obj):
                         score-=5
                 checked.append(grid[row][col])
     return score
+
+def probability(temperature, fold, current_score, current_grid, current_p_list):
+    score_difference = check_protein(fold.grid, fold.Protein) - current_score
+    score_calc = score_difference * 100
+    prob = math.exp(-score_calc / temperature)
+    if prob > random.random():
+        return
+    else:
+        fold.grid = current_grid 
+        fold.Protein.protein_list = current_p_list 
+        return
+
+def check_highscore(fold, current_score, highscore, highproteinlist):
+    if check_protein(fold.grid, fold.Protein) <= highscore:
+        highscore = copy.copy(check_protein(fold.grid, fold.Protein))
+        highproteinlist = copy.deepcopy(fold.Protein.protein_list)
+        return highscore, highproteinlist
+    return highscore, highproteinlist

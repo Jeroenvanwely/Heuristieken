@@ -20,7 +20,7 @@ In het Data mapje, zal alle data die nodig is voor het gebruiken van deze files 
 
 In het Code mapje, zal alle code the vinden zijn die geschreven is.
 
-In het Results mapje zullen alle resultaten worden opgeslagen.
+In het Results mapje zullen alle resultaten worden opgeslagen en de resultaten van het verloop van de algoritmes.
 
 ## Testen
 

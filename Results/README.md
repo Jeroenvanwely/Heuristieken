@@ -9,7 +9,7 @@ De hillclimber is op elk proteïne 10.000 keer toegepast. Hier zijn vervolgens 3
 
 ## Simulated Annealing
 
-Onder deze map zijn verschillende cooling schema's te vinden. Onder elk specifiek cooling schema zijn er twee verschillende bestandjes te vinden. 
+Onder deze map zijn verschillende cooling schema's te vinden. Onder elk specifiek cooling schema zijn er twee verschillende bestandjes te vinden. De cooling schedules die gebruikt zijn, zijn: Lineair, exponentieel en logaritmisch.
 
 ### Course bestand
 
